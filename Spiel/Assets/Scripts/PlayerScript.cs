@@ -21,7 +21,7 @@ public class PlayerScript : MonoBehaviour
     private void Awake()
     {
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
-        mySpriteRenderer = GetComponent<SpriteRenderer>();
+        mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void Update()
