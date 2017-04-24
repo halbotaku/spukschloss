@@ -17,6 +17,7 @@ public class PlayerScript : MonoBehaviour
     // variable to hold a reference to our SpriteRenderer component (Flipping the Sprite)
     private SpriteRenderer mySpriteRenderer;
 
+
     // This function is called just one time by Unity the moment the game loads
     private void Awake()
     {

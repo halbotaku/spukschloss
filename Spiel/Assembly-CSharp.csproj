@@ -48,7 +48,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Paths\pathArranger.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollower.cs" />
-     <Compile Include="Assets\Scripts\PlayerScript.cs" />
+     <Compile Include="Assets\Scripts\player\PlayerScript.cs" />
+     <Compile Include="Assets\Scripts\player\objectPickUp.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
