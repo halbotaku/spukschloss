@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Player controller and behavior
@@ -11,7 +12,7 @@ public class PlayerScript : MonoBehaviour
 	public Vector2 speed = new Vector2(1, 1);
 
 	// 2 - Store the movement and the component
-	private Vector2 movement;
+	[NonSerialized] public Vector2 movement;
 	private Rigidbody2D rigidbodyComponent;
 
     // variable to hold a reference to our SpriteRenderer component (Flipping the Sprite)
