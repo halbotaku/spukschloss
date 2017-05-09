@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 0c839a90140cef34c89fa03dfa883158
-timeCreated: 1493017404
+timeCreated: 1494360611
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -80,10 +80,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 2
-        width: 44
-        height: 103
+        x: 2
+        y: 1
+        width: 41
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -93,10 +93,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_1
       rect:
         serializedVersion: 2
-        x: 60
-        y: 2
-        width: 37
-        height: 103
+        x: 53
+        y: 1
+        width: 35
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -106,10 +106,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_2
       rect:
         serializedVersion: 2
-        x: 111
-        y: 3
-        width: 35
-        height: 102
+        x: 99
+        y: 1
+        width: 33
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,10 +119,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_3
       rect:
         serializedVersion: 2
-        x: 160
-        y: 3
-        width: 39
-        height: 102
+        x: 143
+        y: 1
+        width: 36
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,10 +132,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_4
       rect:
         serializedVersion: 2
-        x: 263
-        y: 3
-        width: 36
-        height: 102
+        x: 190
+        y: 1
+        width: 34
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,10 +145,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_5
       rect:
         serializedVersion: 2
-        x: 212
-        y: 3
-        width: 36
-        height: 102
+        x: 236
+        y: 1
+        width: 33
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,10 +158,10 @@ TextureImporter:
       name: hg1Walk_spritesheet_6
       rect:
         serializedVersion: 2
-        x: 313
-        y: 3
-        width: 37
-        height: 102
+        x: 281
+        y: 1
+        width: 34
+        height: 94
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
