@@ -10,8 +10,8 @@ public class pathFollowerGuest : MonoBehaviour {
     //Create Arranger holding the paths (pathArranger.cs)
     public pathArranger arranger;
 
-    //Create variable for holding WaypointOfArrival
-    public string destination = "idlePosition";
+    //Create variable for remembering the assigned room
+    public string room;
 
     //minimum Distance
     private float minDist = 0.1f;
@@ -23,11 +23,7 @@ public class pathFollowerGuest : MonoBehaviour {
 
     //Create boolean for start/stop of Movement Sections
     public bool idleInRoom = true;
-    public bool waitForRepair = false;
-    public bool go = false;
-    public bool goingBack = false;
-    public bool bitchImOut = false;
-
+    public bool goingToReception = false;
 
     // variable to hold a reference to our SpriteRenderer component (Flipping the Sprite)
     private SpriteRenderer mySpriteRenderer;
@@ -38,6 +34,10 @@ public class pathFollowerGuest : MonoBehaviour {
     //time in seconds of waiting on spot while idling
     public float idlingTime;
     private float idleCountdown;
+
+    //time in seconds of waiting before leaving to reception / leaving the hotel
+    private float waitUntilReception;
+    private float waitUntilLeave;
 
 
     // This function is called just one time by Unity the moment the game loads
@@ -60,51 +60,43 @@ public class pathFollowerGuest : MonoBehaviour {
         //Check the distance of the object to the next waypoint
         float dist = Vector3.Distance(gameObject.transform.position, arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position);
 
-        //Check if Object is set to Idling
+        /*
+         * Setting the speed dependant on movement mode
+         */
         if (idleInRoom)
         {
-            speed = idleSpeed;
-            //Check if minimum Distance is achieved, if so switch to next waypoint
-            if (dist > minDist)
+            //set the speed of the hotel guest to the idle Speed
+            if (speed != idleSpeed)
             {
-                //Move the Object to next waypoint
-                Move();
+                tempSpeed = speed;
+                speed = idleSpeed;
             }
-            else
+        }
+        else if (goingToReception)
+        {
+            //set the speed of the hotel guest to the normal speed
+            if (speed != idleSpeed)
             {
-                if (directionReversed == false)
-                {
+                speed = tempSpeed;
+            }
+        }
 
+        //Check if minimum Distance is achieved, if so switch to next waypoint
+        if (dist > minDist)
+        {
+            //Move the Object to next waypoint
+            Move();
+        }
+        else
+        {
+            if (directionReversed == false)
+            {
+
+
+                if (currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
+                {
                     //When hotelguest has reached the side of the room
-                    if (currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
-                    {
-
-                        if (idleCountdown > 0)
-                        {
-                            idleCountdown = idleCountdown - Time.deltaTime;
-                        }
-                        else
-                        {
-                            //stop movement for a few seconds before returning to other side of the room
-                            directionReversed = true;
-                            idleCountdown = idlingTime;
-                        }
-                    }
-                    else
-                    {
-                        //increase the counting value to move to the next waypoint
-                        currentWaypoint++;
-                    }
-                }
-                else
-                {
-                    if (currentWaypoint < arranger.paths[arranger.currentPath].transform.childCount &&
-                        currentWaypoint > 0)
-                    {
-                        //decrease the counting value to move to the previous waypoint (backwards)
-                        currentWaypoint--;
-                    }
-                    else
+                    if (idleInRoom)
                     {
                         if (idleCountdown > 0)
                         {
@@ -115,6 +107,43 @@ public class pathFollowerGuest : MonoBehaviour {
                             //stop movement for a few seconds before returning to other side of the room
                             directionReversed = false;
                             idleCountdown = idlingTime;
+                        }
+                    }
+                    else
+                    {
+                        if (goingToReception)
+                        {
+                            //increase the counting value to move to the next waypoint
+                            currentWaypoint++;
+                        }
+                    }
+                }
+                else
+                {
+                    if (currentWaypoint < arranger.paths[arranger.currentPath].transform.childCount &&
+                        currentWaypoint > 0)
+                    {
+
+                        if (goingToReception)
+                        {
+                            //decrease the counting value to move to the previous waypoint (backwards)
+                            currentWaypoint--;
+                        }
+                    }
+                    else
+                    {       //when guest has reached end of room
+                        if (idleInRoom)
+                        {
+                            if (idleCountdown > 0)
+                            {
+                                idleCountdown = idleCountdown - Time.deltaTime;
+                            }
+                            else
+                            {
+                                //stop movement for a few seconds before returning to other side of the room
+                                directionReversed = true;
+                                idleCountdown = idlingTime;
+                            }
                         }
                     }
                 }
@@ -148,6 +177,46 @@ public class pathFollowerGuest : MonoBehaviour {
                 // revert the sprite to normal
                 mySpriteRenderer.flipX = false;
             }
+        }
+
+    }
+
+    public void letGuestReact(GameObject interactionObject)
+    {
+            //stop idling
+            idleInRoom = false;
+
+            //hotel guest reacts to damage
+            Debug.Log("Uuuuuaaaaaarghhhh!");
+
+            //call the time the guest is willing to wait until repair
+            InteractionList list = interactionObject.GetComponent<InteractionList>();
+            waitUntilReception = list.inRoomWaitingList[list.index];
+            waitUntilLeave = list.atReceptionWaitingList[list.index];
+
+            //let the guest wait in the room for the mentioned time being
+            StartCoroutine(waitForRepair());
+    }
+
+    IEnumerator waitForRepair()
+    {
+        //wait for the according time
+        yield return new WaitForSeconds(waitUntilReception);
+
+        //check whether damage has been repaired
+        //TO DO
+
+        //otherwise go to the reception
+        Debug.Log("Ich gehe mich beschweren.");
+
+        //pick the way leading to the reception
+        currentWaypoint = 0;
+        arranger.currentPath = 1;
+        directionReversed = false;
+        goingToReception = true;
+        if (speed != idleSpeed)
+        {
+        speed = tempSpeed;
         }
 
     }
