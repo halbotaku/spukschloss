@@ -72,16 +72,8 @@ public class pathFollowerGuest : MonoBehaviour {
                 speed = idleSpeed;
             }
         }
-        else if (goingToReception)
-        {
-            //set the speed of the hotel guest to the normal speed
-            if (speed != idleSpeed)
-            {
-                speed = tempSpeed;
-            }
-        }
 
-        //Check if minimum Distance is achieved, if so switch to next waypoint
+        //Check if minimum Distance is achieved, if so go to next waypoint
         if (dist > minDist)
         {
             //Move the Object to next waypoint
@@ -91,11 +83,51 @@ public class pathFollowerGuest : MonoBehaviour {
         {
             if (directionReversed == false)
             {
-
-
+                //When hotelguest has reached the side of the room
                 if (currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
                 {
-                    //When hotelguest has reached the side of the room
+                    if (idleInRoom)
+                    {
+                        if (idleCountdown > 0)
+                        {
+                            idleCountdown = idleCountdown - Time.deltaTime;
+                        }
+                        else
+                        {
+                            //stop movement for a few seconds before returning to other side of the room
+                            directionReversed = true;
+                            idleCountdown = idlingTime;
+                        }
+                    }
+                    else if (goingToReception)
+                    {
+                        //TO DO
+                        //Hotel guest waits at reception
+                        letGuestCheckOut();
+                    }
+                }
+                //When hotel guest has not reached the end yet
+                else
+                {
+                        if (goingToReception)
+                        {
+                            //increase the counting value to move to the next waypoint
+                            currentWaypoint++;
+                        }
+
+                    if (idleInRoom)
+                    {
+                        //increase the counting value to move to the next waypoint
+                        currentWaypoint++;
+                    }
+                }
+            }
+            //When direction is set to be reversed
+            else
+            {
+                //When hotelguest has reached the side of the room/end of path (beginning waypoint)
+                if (currentWaypoint == 0)
+                {
                     if (idleInRoom)
                     {
                         if (idleCountdown > 0)
@@ -109,42 +141,25 @@ public class pathFollowerGuest : MonoBehaviour {
                             idleCountdown = idlingTime;
                         }
                     }
-                    else
+                    else if (goingToReception)
                     {
-                        if (goingToReception)
-                        {
-                            //increase the counting value to move to the next waypoint
-                            currentWaypoint++;
-                        }
+                        idleInRoom = false;
+                        directionReversed = false;
                     }
                 }
+                //When hotel guest has not reached the beginning yet
                 else
                 {
-                    if (currentWaypoint < arranger.paths[arranger.currentPath].transform.childCount &&
-                        currentWaypoint > 0)
+                    if (goingToReception)
                     {
-
-                        if (goingToReception)
-                        {
-                            //decrease the counting value to move to the previous waypoint (backwards)
-                            currentWaypoint--;
-                        }
+                        //decrease the counting value to move to the previous waypoint
+                        currentWaypoint--;
                     }
-                    else
-                    {       //when guest has reached end of room
-                        if (idleInRoom)
-                        {
-                            if (idleCountdown > 0)
-                            {
-                                idleCountdown = idleCountdown - Time.deltaTime;
-                            }
-                            else
-                            {
-                                //stop movement for a few seconds before returning to other side of the room
-                                directionReversed = true;
-                                idleCountdown = idlingTime;
-                            }
-                        }
+
+                    if (idleInRoom)
+                    {
+                        //decrease the counting value to move to the next waypoint
+                        currentWaypoint--;
                     }
                 }
             }
@@ -198,6 +213,17 @@ public class pathFollowerGuest : MonoBehaviour {
             StartCoroutine(waitForRepair());
     }
 
+    public void letGuestCheckOut()
+    {
+        //hotel guest reports damage at reception
+        Debug.Log("Das geht so nicht!");
+
+        //let the guest wait in the at the reception for the mentioned time being
+        StartCoroutine(waitForRepairReception());
+
+        Debug.Log("Ich muss mich beschweren!");
+    }
+
     IEnumerator waitForRepair()
     {
         //wait for the according time
@@ -207,6 +233,7 @@ public class pathFollowerGuest : MonoBehaviour {
         //TO DO
 
         //otherwise go to the reception
+        speed = tempSpeed;
         Debug.Log("Ich gehe mich beschweren.");
 
         //pick the way leading to the reception
@@ -219,5 +246,24 @@ public class pathFollowerGuest : MonoBehaviour {
         speed = tempSpeed;
         }
 
+    }
+
+    IEnumerator waitForRepairReception()
+    {
+        //wait for the according time
+        yield return new WaitForSeconds(waitUntilLeave);
+
+        //check whether damage has been repaired
+        //TO DO
+
+        //pick the way leading out of the hotel
+        currentWaypoint = 0;
+        arranger.currentPath = 2;
+        directionReversed = false;
+        goingToReception = true;
+        idleInRoom = false;
+
+        //otherwise leave the hotel
+        Debug.Log("SO EIN SCHLECHTER SERVICE!");
     }
 }
