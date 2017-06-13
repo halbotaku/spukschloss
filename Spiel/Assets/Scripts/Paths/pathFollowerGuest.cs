@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class pathFollowerGuest : MonoBehaviour {
@@ -38,6 +37,10 @@ public class pathFollowerGuest : MonoBehaviour {
     //time in seconds of waiting before leaving to reception / leaving the hotel
     private float waitUntilReception;
     private float waitUntilLeave;
+
+    //boolean for Position at reception
+    //save variable for checking whether customer reached the reception already
+    private bool reachedReception;
 
 
     // This function is called just one time by Unity the moment the game loads
@@ -98,12 +101,6 @@ public class pathFollowerGuest : MonoBehaviour {
                             directionReversed = true;
                             idleCountdown = idlingTime;
                         }
-                    }
-                    else if (goingToReception)
-                    {
-                        //TO DO
-                        //Hotel guest waits at reception
-                        letGuestCheckOut();
                     }
                 }
                 //When hotel guest has not reached the end yet
@@ -213,17 +210,6 @@ public class pathFollowerGuest : MonoBehaviour {
             StartCoroutine(waitForRepair());
     }
 
-    public void letGuestCheckOut()
-    {
-        //hotel guest reports damage at reception
-        Debug.Log("Das geht so nicht!");
-
-        //let the guest wait in the at the reception for the mentioned time being
-        StartCoroutine(waitForRepairReception());
-
-        Debug.Log("Ich muss mich beschweren!");
-    }
-
     IEnumerator waitForRepair()
     {
         //wait for the according time
@@ -243,9 +229,37 @@ public class pathFollowerGuest : MonoBehaviour {
         goingToReception = true;
         if (speed != idleSpeed)
         {
-        speed = tempSpeed;
+            speed = tempSpeed;
         }
 
+        //compare current waypoint and the reception waypoint
+        reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
+
+        //activate check whether end has been reached
+        StartCoroutine(receptionCheck());
+
+    }
+
+    IEnumerator receptionCheck()
+    {
+        //wait until the reception has been reached
+        while (reachedReception == false)
+        {
+            yield return null;
+            reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
+        }
+
+        //start hotelguest reaction at reception
+        letGuestCheckOut();
+    }
+
+    public void letGuestCheckOut()
+    {
+        //hotel guest reports damage at reception
+        Debug.Log("Ich habe eine Beschwerde!");
+
+        //wait for the according time
+        StartCoroutine(waitForRepairReception());
     }
 
     IEnumerator waitForRepairReception()

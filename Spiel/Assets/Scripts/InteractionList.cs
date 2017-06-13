@@ -62,6 +62,7 @@ public class InteractionList : MonoBehaviour {
         //create an instance of pathFollowerGuest
         pathFollowerGuest startReactionGuest = reactingGuest.GetComponent<pathFollowerGuest>();
 
+        //Start the proces of the guests' Reaction
         startReactionGuest.letGuestReact(gameObject);
 
     }
