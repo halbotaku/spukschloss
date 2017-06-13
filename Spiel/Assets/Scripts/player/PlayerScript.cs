@@ -63,9 +63,7 @@ public class PlayerScript : MonoBehaviour
 		// Move the game object (Movement)
 		rigidbodyComponent.velocity = movement;
 
-
-
-        //Code for detecting the Screensize & Stopping the Ghost from movin out of it
+        //Code for detecting the Screensize & Stopping the Ghost from moving out of it
         var pos = Camera.main.WorldToViewportPoint(transform.position);
         pos.x = Mathf.Clamp(pos.x, 0.04f, 0.96f);
         pos.y = Mathf.Clamp(pos.y, 0.07f, 0.93f);
