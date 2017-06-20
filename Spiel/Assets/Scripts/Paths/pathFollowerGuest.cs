@@ -199,7 +199,6 @@ public class pathFollowerGuest : MonoBehaviour {
             idleInRoom = false;
 
             //hotel guest reacts to damage
-            Debug.Log("Uuuuuaaaaaarghhhh!");
 
             //call the time the guest is willing to wait until repair
             InteractionList list = interactionObject.GetComponent<InteractionList>();
@@ -220,7 +219,6 @@ public class pathFollowerGuest : MonoBehaviour {
 
         //otherwise go to the reception
         speed = tempSpeed;
-        Debug.Log("Ich gehe mich beschweren.");
 
         //pick the way leading to the reception
         currentWaypoint = 0;
@@ -256,7 +254,6 @@ public class pathFollowerGuest : MonoBehaviour {
     public void letGuestCheckOut()
     {
         //hotel guest reports damage at reception
-        Debug.Log("Ich habe eine Beschwerde!");
 
         //wait for the according time
         StartCoroutine(waitForRepairReception());
@@ -278,6 +275,5 @@ public class pathFollowerGuest : MonoBehaviour {
         idleInRoom = false;
 
         //otherwise leave the hotel
-        Debug.Log("SO EIN SCHLECHTER SERVICE!");
     }
 }

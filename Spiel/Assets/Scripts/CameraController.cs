@@ -14,8 +14,8 @@ public class CameraController : MonoBehaviour {
 void start()
     {
         //get the position of the player
-        float posx = player.transform.position.x;
-        float posy = player.transform.position.y;
+        posx = player.transform.position.x;
+        posy = player.transform.position.y;
     }
 
 	// Update is called once per frame

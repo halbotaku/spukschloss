@@ -17,7 +17,6 @@ public class ObjectInteraction : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(currentInteraction);
         //check, when an item is held and the player is hovering over an interaction object (-> currentInteraction), if the player activates the interaction
         if (currentInteraction!=null && Input.GetButtonDown("pickUp"))
         {

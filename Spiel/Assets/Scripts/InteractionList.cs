@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class InteractionList : MonoBehaviour {
 
-    //List containing possible combination pickUp Objects
-    public GameObject[] pickUpList;
-
     //create variable holding the position of the interactionObject
     public string position;
+
+    //List containing possible combination pickUp Objects
+    public GameObject[] pickUpList;
 
     //List containing states of Animation (depending on pickUp Item)
     public string[] animationList;
@@ -21,11 +21,17 @@ public class InteractionList : MonoBehaviour {
     //List containing the time hotel guest is willing to wait until leave of the hotel
     public float[] atReceptionWaitingList;
 
+    //List containing the necessery times for repairing the occured problem (according to other sequences)
+    public float[] repairTime;
+
     //boolean to check whether it has been interacted with befor
-    private bool hasBeenInteractedWith = false;
+    public bool hasBeenInteractedWith = false;
 
     //variable to save the index of the interaction point
     public int index;
+
+    //gameObject referring to the hotel Owner
+    public GameObject hotelOwner;
 
     //gameObject remembering the reacting guest
     private GameObject reactingGuest;
@@ -46,6 +52,13 @@ public class InteractionList : MonoBehaviour {
         //pick the rightful animation out of the animationList
         animator.Play(animationList[index]);
         hasBeenInteractedWith = true;
+
+        //add the object and Room the the hotel Owner's TO DO List
+        RepairScript repairScript = hotelOwner.GetComponent<RepairScript>();
+
+        repairScript.roomRepairList.Add(position);
+        repairScript.objectRepairList.Add(this.name);
+
 
         //gather all guests
         GameObject[] guests = GameObject.FindGameObjectsWithTag("guest");

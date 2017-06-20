@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Paths\pathArranger.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollower.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollowerGuest.cs" />
+     <Compile Include="Assets\Scripts\RepairScript.cs" />
      <Compile Include="Assets\Scripts\player\ObjectInteraction.cs" />
      <Compile Include="Assets\Scripts\player\ObjectPickUp.cs" />
      <Compile Include="Assets\Scripts\player\PlayerScript.cs" />

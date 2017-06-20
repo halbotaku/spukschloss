@@ -27,6 +27,10 @@ public class pathFollower : MonoBehaviour {
     //boolean for controlling direction on path
     public bool directionReversed;
 
+    //Array for saving the rooms & items in need of repair
+    private string[] repairObjectList;
+    private string[] roomList;
+
     
     
     
