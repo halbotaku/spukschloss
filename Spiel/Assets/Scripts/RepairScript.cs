@@ -7,6 +7,8 @@ public class RepairScript : MonoBehaviour {
     //Variable for referencing the current GameObject Skript pathFollower
     private pathFollower hotelOwner;
 
+    private bool isRepairing;
+
     //ArrayList remebering the destinations & according Objects
     public List<string> roomRepairList = new List<string>();
     public List<string> objectRepairList = new List<string>();
@@ -25,29 +27,35 @@ public class RepairScript : MonoBehaviour {
 	void LateUpdate () {
 
         //check for current destination
-        if (roomRepairList.Count == 0 && objectRepairList.Count == 0)
+        if (!isRepairing)
         {
-            hotelOwner.destination = "reception";
-        }
-        else
-        {
-            hotelOwner.destination = roomRepairList[0];
-        }
+            if (roomRepairList.Count == 0 && objectRepairList.Count == 0)
+            {
+                hotelOwner.destination = "reception";
+            }
+            else
+            {
+                hotelOwner.destination = roomRepairList[0];
+            }
 
-        //check the current destination
-        if (hotelOwner.destination == "reception")
-        {
-            //TO DO: CHECK FOR CALMING HOTELGUESTS WANTING TO CHECK OUT
-            Debug.Log("Ich habe nichts zu tun!");
-        }
-        else
-        {
-            //TO DO: WAIT UNTIL DESTINATION HAS BEEN REACHED, THEN TAKE CARE OF REPAIR
-            Debug.Log("Ich muss etwas reparieren!");
+            //check the current destination
+            if (hotelOwner.destination == "reception")
+            {
+                //TO DO: CHECK FOR CALMING HOTELGUESTS WANTING TO CHECK OUT
+                Debug.Log("Ich habe nichts zu tun!");
+            }
+            else
+            {
+                //TO DO: WAIT UNTIL DESTINATION HAS BEEN REACHED, THEN TAKE CARE OF REPAIR
+                Debug.Log("Ich muss etwas reparieren!");
 
-            //wait for a second before reacting to the called repair
-            StartCoroutine(goToRepair());
+                //set Repair-Boolean to true
+                isRepairing = true;
 
+                //wait for a second before reacting to the called repair
+                StartCoroutine(goToRepair());
+
+            }
         }
 		
 	}
@@ -67,7 +75,6 @@ public class RepairScript : MonoBehaviour {
             reachedDestination = hotelOwner.currentWaypoint + 1 == hotelOwner.arranger.paths[hotelOwner.arranger.currentPath].transform.childCount;
         }
 
-
         //find the listed object whithin the specified room
         GameObject toRepair = GameObject.Find(objectRepairList[0]);
 
@@ -86,9 +93,11 @@ public class RepairScript : MonoBehaviour {
             interactionList.hasBeenInteractedWith = false;
 
             //remove the first entries of room and repair object lists
-            roomRepairList.Clear();
-            objectRepairList.Clear();
-        }
+            roomRepairList.RemoveAt(0);
+            objectRepairList.RemoveAt(0);
 
+            //set Repair-Boolean to false
+            isRepairing = false;
+        }
     }
 }
