@@ -6,6 +6,8 @@ public class pathFollowerGuest : MonoBehaviour {
     //Create variable for remembering the current waypoint
     public int currentWaypoint = 0;
 
+    private GameObject brokenObject;
+
     //Create Arranger holding the paths (pathArranger.cs)
     public pathArranger arranger;
 
@@ -195,6 +197,9 @@ public class pathFollowerGuest : MonoBehaviour {
 
     public void letGuestReact(GameObject interactionObject)
     {
+        //remember which object caused the reaction
+        brokenObject = interactionObject;
+
             //stop idling
             idleInRoom = false;
 
@@ -214,27 +219,34 @@ public class pathFollowerGuest : MonoBehaviour {
         //wait for the according time
         yield return new WaitForSeconds(waitUntilReception);
 
-        //check whether damage has been repaired
-        //TO DO
-
-        //otherwise go to the reception
-        speed = tempSpeed;
-
-        //pick the way leading to the reception
-        currentWaypoint = 0;
-        arranger.currentPath = 1;
-        directionReversed = false;
-        goingToReception = true;
-        if (speed != idleSpeed)
+        //check whether damage has been repaired yet
+        if (hasBeenRepairedYet(brokenObject))
         {
-            speed = tempSpeed;
+
+            //return back to idling in your room
+            this.idleInRoom = true;
         }
+        else
+        {
+            //otherwise go to the reception
+            speed = tempSpeed;
 
-        //compare current waypoint and the reception waypoint
-        reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
+            //pick the way leading to the reception
+            currentWaypoint = 0;
+            arranger.currentPath = 1;
+            directionReversed = false;
+            goingToReception = true;
+            if (speed != idleSpeed)
+            {
+                speed = tempSpeed;
+            }
 
-        //activate check whether end has been reached
-        StartCoroutine(receptionCheck());
+            //compare current waypoint and the reception waypoint
+            reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
+
+            //activate check whether end has been reached
+            StartCoroutine(receptionCheck());
+        }
 
     }
 
@@ -264,16 +276,49 @@ public class pathFollowerGuest : MonoBehaviour {
         //wait for the according time
         yield return new WaitForSeconds(waitUntilLeave);
 
-        //check whether damage has been repaired
-        //TO DO
+        //check whether damage has been repaired yet
+        if (hasBeenRepairedYet(brokenObject))
+        {
+            //return back to idling in your room
+            directionReversed = true;
 
-        //pick the way leading out of the hotel
-        currentWaypoint = 0;
-        arranger.currentPath = 2;
-        directionReversed = false;
-        goingToReception = true;
-        idleInRoom = false;
+            //wait until she has reached the room again
+            while (currentWaypoint != 0)
+            {
+                yield return null;
+            }
 
-        //otherwise leave the hotel
+            //return back to idling in your room
+            arranger.currentPath = 0;
+            directionReversed = true;
+            goingToReception = false;
+            idleInRoom = true;
+
+        }
+        else
+        {
+
+            //pick the way leading out of the hotel
+            currentWaypoint = 0;
+            arranger.currentPath = 2;
+            directionReversed = false;
+            goingToReception = true;
+            idleInRoom = false;
+
+            //otherwise leave the hotel
+        }
+    }
+
+    private bool hasBeenRepairedYet(GameObject brokenObject)
+    {
+        InteractionList list = brokenObject.GetComponent<InteractionList>();
+
+        if (list.hasBeenInteractedWith == false)
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
