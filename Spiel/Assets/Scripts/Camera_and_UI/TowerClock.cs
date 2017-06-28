@@ -18,12 +18,12 @@ public class TowerClock : MonoBehaviour {
     public Text txt;
 
     //counter for the scared-off hotel guests
-    private int guestCounter;
+    public int guestCounter;
     private float rotationSpeed;
 
     public void Start()
     {
-        counter = levelLength * 6;
+        counter = levelLength * 60;
     }
 
     public void Update()
@@ -41,7 +41,6 @@ public class TowerClock : MonoBehaviour {
         {
             //decrease the counter
             counter -= Time.deltaTime;
-            Debug.Log(counter);
         }
         else
         {

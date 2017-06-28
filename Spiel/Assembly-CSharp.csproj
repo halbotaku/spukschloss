@@ -47,10 +47,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Camera_and_UI\CameraController.cs" />
+     <Compile Include="Assets\Scripts\Camera_and_UI\PortraitHandler.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\TowerClock.cs" />
      <Compile Include="Assets\Scripts\Menus\mainMenu.cs" />
      <Compile Include="Assets\Scripts\Menus\pauseMenu.cs" />
      <Compile Include="Assets\Scripts\Objects\InteractionList.cs" />
+     <Compile Include="Assets\Scripts\Objects\ModeScript.cs" />
      <Compile Include="Assets\Scripts\Objects\ObjectInteraction.cs" />
      <Compile Include="Assets\Scripts\Objects\ObjectPickUp.cs" />
      <Compile Include="Assets\Scripts\Objects\PickUpInfo.cs" />
@@ -59,6 +61,8 @@
      <Compile Include="Assets\Scripts\Paths\pathFollowerGuest.cs" />
      <Compile Include="Assets\Scripts\RepairScript.cs" />
      <Compile Include="Assets\Scripts\player\PlayerScript.cs" />
+     <Compile Include="Assets\Scripts\shader\SpriteOutline.cs" />
+     <None Include="Assets\Scripts\shader\Sprites-Outline.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

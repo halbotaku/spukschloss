@@ -15,6 +15,9 @@ public class InteractionList : MonoBehaviour {
     //List containing states of Animation (depending on pickUp Item)
     public string[] animationList;
 
+    //List containing the graveness of the damage done
+    public string[] gradeOfDamage;
+
     //List containing the time hotel Guest is willing to wait until leaving for reception
     public float[] inRoomWaitingList;
 
@@ -78,7 +81,7 @@ public class InteractionList : MonoBehaviour {
             pathFollowerGuest startReactionGuest = reactingGuest.GetComponent<pathFollowerGuest>();
 
             //Start the proces of the guests' Reaction
-            startReactionGuest.letGuestReact(gameObject);
+            startReactionGuest.letGuestReact(gameObject, pickUp);
         }
 
     }

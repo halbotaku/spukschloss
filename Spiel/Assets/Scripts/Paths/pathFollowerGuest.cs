@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class pathFollowerGuest : MonoBehaviour {
+public class pathFollowerGuest : MonoBehaviour
+{
 
     //Create variable for remembering the current waypoint
     public int currentWaypoint = 0;
 
+    //create variable remembering the brokenObject (for repair)
     private GameObject brokenObject;
 
     //Create Arranger holding the paths (pathArranger.cs)
@@ -40,10 +42,39 @@ public class pathFollowerGuest : MonoBehaviour {
     private float waitUntilReception;
     private float waitUntilLeave;
 
-    //boolean for Position at reception
-    //save variable for checking whether customer reached the reception already
+    //variable for checking whether customer reached the reception already
     private bool reachedReception;
 
+    //variables for counting down the waiting time at the room
+    private float roomWaitingCountdown;
+    private bool isWaitingInRoom = false;
+
+    //variables for counting down the waiting time at the reception
+    private float receptionWaitingCountdown;
+    private bool isWaitingAtReception = false;
+
+    //boolean handling whether guest has reached the outside
+    private bool reachedOutside;
+    private bool reachedRoom;
+
+    //guestCounter for Game-Scor
+    public GameObject guestCounter;
+
+    //variable holding guest reaction Icon
+    private GameObject reactionIcon;
+
+    //Handling the Countdown/Animation part
+    private GameObject patienceCounter;
+    private Animator patienceCounterAnimator;
+
+    //handling the way back
+    private bool isReturningToIdling;
+    private bool isReturningToRoom;
+
+    //remembering the intitial hotelguest-position
+    Vector3 position;
+    float offset;
+    public bool floorPositionTop;
 
     // This function is called just one time by Unity the moment the game loads
     private void Awake()
@@ -56,6 +87,18 @@ public class pathFollowerGuest : MonoBehaviour {
 
         //Set idling time for counting down
         idleCountdown = idlingTime;
+
+        //Set the position variables for the hotelguest
+        position = transform.position;
+
+        if (position.y > 0)
+        {
+            offset = 0.1f;
+        }
+        else
+        {
+            offset = - 0.1f;
+        }
     }
 
     // Update is called once per frame
@@ -108,11 +151,11 @@ public class pathFollowerGuest : MonoBehaviour {
                 //When hotel guest has not reached the end yet
                 else
                 {
-                        if (goingToReception)
-                        {
-                            //increase the counting value to move to the next waypoint
-                            currentWaypoint++;
-                        }
+                    if (goingToReception)
+                    {
+                        //increase the counting value to move to the next waypoint
+                        currentWaypoint++;
+                    }
 
                     if (idleInRoom)
                     {
@@ -163,6 +206,113 @@ public class pathFollowerGuest : MonoBehaviour {
                 }
             }
         }
+
+        //Handle the in-Room-Waiting Countdown
+        if (isWaitingInRoom == true && roomWaitingCountdown > 0)
+        {
+            roomWaitingCountdown -= Time.deltaTime;
+
+            if (roomWaitingCountdown <= 0)
+            {
+                //stop waiting and go to reception
+                stopWaitingInRoom();
+            }
+
+            if (hasBeenRepairedYet(brokenObject))
+            {
+                isWaitingInRoom = false;
+                isReturningToIdling = true;
+            }
+        }
+
+        //Handle returning to idling at any point
+        if (isReturningToIdling == true && isWaitingInRoom == false)
+        {
+            reactionIcon.SetActive(false);
+            patienceCounter.SetActive(false);
+
+            isReturningToIdling = false;
+
+            //return back to idling in your room
+            returnToRoom();
+        }
+
+        //Handle waiting until having reached the reception
+        if (reachedReception == false && goingToReception == true && directionReversed == false && arranger.currentPath == 0 ||
+            reachedReception == false && goingToReception == true && directionReversed == false && arranger.currentPath == 1)
+        {
+            //Keep on checking until you reached the reception
+            reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
+        }
+
+        if (reachedReception == true)
+        {
+            goingToReception = false;
+            reachedReception = false;
+            startWaitingAtReception();
+        }
+
+
+        //Handle the at-Reception-Waiting Countdown
+        if (isWaitingAtReception == true && receptionWaitingCountdown > 0)
+        {
+            receptionWaitingCountdown -= Time.deltaTime;
+
+            if (receptionWaitingCountdown <= 0)
+            {
+                //stop waiting and go to reception
+                stopWaitingAtReception();
+            }
+
+            if (hasBeenRepairedYet(brokenObject))
+            {
+                //stop waiting and go back
+                isWaitingAtReception = false;
+                isReturningToRoom = true;
+            }
+        }
+
+        //Handle returning to the room
+        if (isReturningToRoom == true && isWaitingAtReception == false)
+        {
+            reactionIcon.SetActive(false);
+            patienceCounter.SetActive(false);
+
+            isReturningToRoom = false;
+
+            //return back to your room
+            directionReversed = true;
+            isWaitingAtReception = false;
+            goingToReception = true;
+        }
+
+        //Handle waiting until having reached the Room when going back
+        if (directionReversed == true && goingToReception == true && reachedRoom == false && transform.position.y >= position.y - offset)
+        {
+            //Keep on checking until you reached the reception
+            reachedRoom = currentWaypoint == 0;
+        }
+
+        if (reachedRoom == true)
+        {
+            goingToReception = false;
+            reachedRoom = false;
+            returnToRoom();
+        }
+
+        //Handle waiting until having reached the Outside
+        if (reachedOutside == false && goingToReception == true && directionReversed == false)
+        {
+            //Keep on checking until you reached the reception
+            reachedOutside = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount && this.gameObject.transform.position.y <= -6.00;
+        }
+
+        if (reachedOutside == true)
+        {
+            goingToReception = false;
+            reachedOutside = false;
+            startLeaving();
+        }
     }
 
 
@@ -195,39 +345,94 @@ public class pathFollowerGuest : MonoBehaviour {
 
     }
 
-    public void letGuestReact(GameObject interactionObject)
+    public void letGuestReact(GameObject interactionObject, GameObject pickupObject)
     {
         //remember which object caused the reaction
         brokenObject = interactionObject;
 
-            //stop idling
-            idleInRoom = false;
+        //get the according icon GameObject
+        reactionIcon = this.gameObject.transform.GetChild(2).gameObject;
 
-            //hotel guest reacts to damage
+        //set the reaction Icon Sprite to the according one
+        SpriteRenderer renderer = reactionIcon.GetComponent<SpriteRenderer>();
 
-            //call the time the guest is willing to wait until repair
-            InteractionList list = interactionObject.GetComponent<InteractionList>();
-            waitUntilReception = list.inRoomWaitingList[list.index];
-            waitUntilLeave = list.atReceptionWaitingList[list.index];
+        //reference the pickup Item
+        GameObject pickupItem = pickupObject;
 
-            //let the guest wait in the room for the mentioned time being
-            StartCoroutine(waitForRepair());
+        PickUpInfo info = pickupItem.GetComponent<PickUpInfo>();
+
+        renderer.sprite = info.reactionIcon;
+        
+        //PickUpInfo info = brokenObject.GetComponent<PickUpInfo>();
+
+        //call the time the guest is willing to wait until repair
+        InteractionList list = interactionObject.GetComponent<InteractionList>();
+        waitUntilReception = list.inRoomWaitingList[list.index];
+        waitUntilLeave = list.atReceptionWaitingList[list.index];
+
+        //Set the Countdown to the waiting times
+        roomWaitingCountdown = waitUntilReception;
+        receptionWaitingCountdown = waitUntilLeave;
+
+        //calculate the speed with which the animation needs to be played according to the waiting time
+        float animationSpeed = (4/3) / waitUntilReception;
+
+        if (animationSpeed - 0.05f > 0)
+        {
+            animationSpeed -= 0.05f;
+        }
+
+        //Assign the animator
+        patienceCounter = this.gameObject.transform.GetChild(1).gameObject;
+
+        patienceCounterAnimator = patienceCounter.GetComponent<Animator>();
+        patienceCounterAnimator.speed = animationSpeed;
+
+        string gradeOfDamage = list.gradeOfDamage[list.index];
+
+        //check for the grade of damage done
+        string patienceCounterAnim = checkGradeOfDamage(gradeOfDamage);
+
+        /*
+         * Actual Rection follows now, Countdown is handled in the Update function
+         */
+
+        //hotel guest reacts to damage
+        reactionIcon.SetActive(true);
+
+        //Stop idling and start waiting
+        idleInRoom = false;
+        isWaitingInRoom = true;
+
+        //set patienceCounter active
+        patienceCounter.SetActive(true);
+
+        //set the patience counter active and play it for the necessary waiting time
+        patienceCounterAnimator.Play(patienceCounterAnim);
     }
 
-    IEnumerator waitForRepair()
-    {
-        //wait for the according time
-        yield return new WaitForSeconds(waitUntilReception);
 
-        //check whether damage has been repaired yet
+    private void stopWaitingInRoom()
+    {
+        isWaitingInRoom = false;
+
+        //set patienceCounter active
+        patienceCounter.SetActive(false);
+
+        //hotel guest reacts to damage
+        reactionIcon.SetActive(false);
+
+        //check whether damage has been repaired after waiting for so long
         if (hasBeenRepairedYet(brokenObject))
         {
-
             //return back to idling in your room
-            this.idleInRoom = true;
+            isReturningToIdling = true;
         }
         else
         {
+            //stop waiting
+            isWaitingInRoom = false;
+
             //otherwise go to the reception
             speed = tempSpeed;
 
@@ -240,73 +445,96 @@ public class pathFollowerGuest : MonoBehaviour {
             {
                 speed = tempSpeed;
             }
-
-            //compare current waypoint and the reception waypoint
-            reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
-
-            //activate check whether end has been reached
-            StartCoroutine(receptionCheck());
         }
-
     }
 
-    IEnumerator receptionCheck()
+    private void startWaitingAtReception()
     {
-        //wait until the reception has been reached
-        while (reachedReception == false)
+        //calculate the speed with which the animation needs to be played according to the waiting time
+        float animationSpeed = (4 / 3) / waitUntilLeave;
+
+        if (animationSpeed - 0.05f > 0)
         {
-            yield return null;
-            reachedReception = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount;
+            animationSpeed -= 0.025f;
         }
 
-        //start hotelguest reaction at reception
-        letGuestCheckOut();
+        patienceCounterAnimator.speed = animationSpeed;
+
+        //reference the brokenObject
+        InteractionList list = brokenObject.GetComponent<InteractionList>();
+        string gradeOfDamage = list.gradeOfDamage[list.index];
+
+        //check for the grade of damage done
+        string patienceCounterAnim = checkGradeOfDamage(gradeOfDamage);
+
+        /*
+         * Actual Reaction follows now, Countdown is handled in the Update function
+         */
+
+        //hotel guest reacts to damage
+        reactionIcon.SetActive(true);
+
+        //assign yourself to waiting at reception once you reached it
+        isWaitingAtReception = true;
+        goingToReception = false;
+
+        //set patienceCounter active
+        patienceCounter.SetActive(true);
+
+        //set the patience counter active and play it for the necessary waiting time
+        patienceCounterAnimator.Play(patienceCounterAnim);
     }
 
-    public void letGuestCheckOut()
+
+    private void stopWaitingAtReception()
     {
-        //hotel guest reports damage at reception
+        //hotel guest reacts to damage
+        reactionIcon.SetActive(false);
 
-        //wait for the according time
-        StartCoroutine(waitForRepairReception());
-    }
+        //stop waiting
+        isWaitingAtReception = false;
 
-    IEnumerator waitForRepairReception()
-    {
-        //wait for the according time
-        yield return new WaitForSeconds(waitUntilLeave);
+        //set patienceCounter active
+        patienceCounter.SetActive(false);
 
-        //check whether damage has been repaired yet
+        //check whether damage has been repaired yet after waiting for so long
         if (hasBeenRepairedYet(brokenObject))
         {
-            //return back to idling in your room
-            directionReversed = true;
-
-            //wait until she has reached the room again
-            while (currentWaypoint != 0)
-            {
-                yield return null;
-            }
-
-            //return back to idling in your room
-            arranger.currentPath = 0;
-            directionReversed = true;
-            goingToReception = false;
-            idleInRoom = true;
-
+            isReturningToRoom = true;
         }
         else
         {
-
             //pick the way leading out of the hotel
             currentWaypoint = 0;
             arranger.currentPath = 2;
             directionReversed = false;
             goingToReception = true;
-            idleInRoom = false;
-
-            //otherwise leave the hotel
         }
+    }
+
+    private void returnToRoom()
+    {
+        //return back to idling in your room
+        arranger.currentPath = 0;
+        directionReversed = false;
+        goingToReception = false;
+        idleInRoom = true;
+    }
+
+    private void startLeaving()
+    {
+        //increase the Score Counter of the game
+        TowerClock counter = guestCounter.GetComponent<TowerClock>();
+        counter.guestCounter += 1;
+
+        //reference your portrait
+        PortraitHandler portrait = this.gameObject.GetComponent<PortraitHandler>();
+
+        //Destroy the portrait
+        portrait.destroy();
+
+        //destroy the hotelguest GameObject
+        GameObject.Destroy(gameObject);
     }
 
     private bool hasBeenRepairedYet(GameObject brokenObject)
@@ -317,8 +545,32 @@ public class pathFollowerGuest : MonoBehaviour {
         {
             return true;
         }
-        else {
+        else
+        {
             return false;
         }
+    }
+
+    public string checkGradeOfDamage(string damage)
+    {
+        string patienceCounterAnim;
+
+        switch (damage)
+        {
+            case "light":
+                patienceCounterAnim = "light_time_animation";
+                break;
+            case "middle":
+                patienceCounterAnim = "middle_time_animation";
+                break;
+            case "heavy":
+                patienceCounterAnim = "heavy_time_animation";
+                break;
+            default:
+                patienceCounterAnim = "light_time_animation";
+                break;
+        }
+
+        return patienceCounterAnim;
     }
 }

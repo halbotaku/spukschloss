@@ -6,7 +6,6 @@ public class RepairScript : MonoBehaviour {
 
     //Variable for referencing the current GameObject Skript pathFollower
     private pathFollower hotelOwner;
-
     private bool isRepairing;
 
     //ArrayList remebering the destinations & according Objects
@@ -16,11 +15,20 @@ public class RepairScript : MonoBehaviour {
     //boolean evaluating whether hotelOwner has reached the destination yet
     private bool reachedDestination;
 
-	// Use this for initialization
-	void Start () {
+    //Variables for calling the animatior of the repair timer
+    private GameObject repairTimer;
+    private Animator repairTimeAnimator;
+
+    // Use this for initialization
+    void Start () {
 
         //Reference the pathFollower belonging to the current GameObject
 		hotelOwner = GetComponent<pathFollower>();
+
+        //reference the timer GameObject & Animator
+        repairTimer = gameObject.transform.GetChild(1).gameObject;
+        repairTimeAnimator = repairTimer.GetComponent<Animator>();
+        repairTimer.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -46,9 +54,6 @@ public class RepairScript : MonoBehaviour {
             }
             else
             {
-                //TO DO: WAIT UNTIL DESTINATION HAS BEEN REACHED, THEN TAKE CARE OF REPAIR
-                Debug.Log("Ich muss etwas reparieren!");
-
                 //set Repair-Boolean to true
                 isRepairing = true;
 
@@ -83,6 +88,27 @@ public class RepairScript : MonoBehaviour {
 
         if (interactionList.position == roomRepairList[0])
         {
+            //calculate the grade of damage
+            string damage = interactionList.gradeOfDamage[interactionList.index];
+            string evaluatedDamage = checkGradeOfDamage(damage);
+
+            //calculate the speed with which the animation needs to be played according to the waiting time
+            float animationSpeed = (4 / 3) / interactionList.repairTime[interactionList.index];
+
+
+            if (animationSpeed - 0.05f > 0)
+            {
+                animationSpeed -= 0.05f;
+            }
+
+            repairTimeAnimator.speed = animationSpeed;
+
+            //set the Repair-Time-Animator to true & play the according timer
+            repairTimer.SetActive(true);
+            repairTimeAnimator.Play(evaluatedDamage);
+
+            repairTimer.SetActive(true);
+
             Animator animator = interactionList.GetComponentInChildren<Animator>();
 
             //wait for the needed repair time length
@@ -98,6 +124,33 @@ public class RepairScript : MonoBehaviour {
 
             //set Repair-Boolean to false
             isRepairing = false;
+
+            //deactivate the timer
+            repairTimer.SetActive(false);
         }
+    }
+
+
+    public string checkGradeOfDamage(string damage)
+    {
+        string patienceCounterAnim;
+
+        switch (damage)
+        {
+            case "light":
+                patienceCounterAnim = "light_time_animation";
+                break;
+            case "middle":
+                patienceCounterAnim = "middle_time_animation";
+                break;
+            case "heavy":
+                patienceCounterAnim = "heavy_time_animation";
+                break;
+            default:
+                patienceCounterAnim = "light_time_animation";
+                break;
+        }
+
+        return patienceCounterAnim;
     }
 }

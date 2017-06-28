@@ -30,9 +30,7 @@ public class pathFollower : MonoBehaviour {
     //Array for saving the rooms & items in need of repair
     private string[] repairObjectList;
     private string[] roomList;
-
-    
-    
+ 
     
     // This function is called just one time by Unity the moment the game loads
     private void Awake()
