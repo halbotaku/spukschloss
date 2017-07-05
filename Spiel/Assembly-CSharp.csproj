@@ -49,6 +49,10 @@
      <Compile Include="Assets\Scripts\Camera_and_UI\CameraController.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\PortraitHandler.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\TowerClock.cs" />
+     <Compile Include="Assets\Scripts\Level_Generation\GuestSpawn.cs" />
+     <Compile Include="Assets\Scripts\Level_Generation\InteractionSpawn.cs" />
+     <Compile Include="Assets\Scripts\Level_Generation\ItemSpawn.cs" />
+     <Compile Include="Assets\Scripts\Level_Generation\RoomPositionInteraction.cs" />
      <Compile Include="Assets\Scripts\Menus\mainMenu.cs" />
      <Compile Include="Assets\Scripts\Menus\pauseMenu.cs" />
      <Compile Include="Assets\Scripts\Objects\InteractionList.cs" />

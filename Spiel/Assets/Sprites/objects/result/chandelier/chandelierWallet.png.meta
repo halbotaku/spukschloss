@@ -1,9 +1,15 @@
 fileFormatVersion: 2
 guid: bb18234afd403604fbab474f04a28c8e
-timeCreated: 1496045531
+timeCreated: 1499063314
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: chandelierWallet_0
+    21300002: chandelierWallet_1
+    21300004: chandelierWallet_2
+    21300006: chandelierWallet_4
+    21300008: chandelierWallet_5
+    21300010: chandelierWallet_6
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -68,7 +74,85 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: chandelierWallet_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 55
+        width: 45
+        height: 66
+      alignment: 9
+      pivot: {x: 0.4580936, y: 0.9761896}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierWallet_1
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 46
+        width: 45
+        height: 75
+      alignment: 9
+      pivot: {x: 0.4580936, y: 0.9790468}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierWallet_2
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 34
+        width: 48
+        height: 87
+      alignment: 9
+      pivot: {x: 0.4476169, y: 0.98193693}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierWallet_4
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 34
+        width: 47
+        height: 87
+      alignment: 9
+      pivot: {x: 0.44650236, y: 0.98193693}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierWallet_5
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 21
+        width: 46
+        height: 100
+      alignment: 9
+      pivot: {x: 0.45900494, y: 0.9811421}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierWallet_6
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 0
+        width: 50
+        height: 120
+      alignment: 9
+      pivot: {x: 0.4308545, y: 0.9842851}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

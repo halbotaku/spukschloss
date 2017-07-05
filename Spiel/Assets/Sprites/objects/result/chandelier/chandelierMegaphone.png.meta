@@ -1,9 +1,12 @@
 fileFormatVersion: 2
 guid: e4a141700ee8e284285c737655bb50ef
-timeCreated: 1496045531
+timeCreated: 1499063204
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: chandelierMegaphone_0
+    21300002: chandelierMegaphone_1
+    21300004: chandelierMegaphone_2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -68,7 +71,46 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: chandelierMegaphone_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 59
+        width: 49
+        height: 62
+      alignment: 9
+      pivot: {x: 0.6165509, y: 0.9821716}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierMegaphone_1
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 60
+        width: 45
+        height: 61
+      alignment: 9
+      pivot: {x: 0.4672489, y: 0.9758391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierMegaphone_2
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 60
+        width: 47
+        height: 61
+      alignment: 9
+      pivot: {x: 0.31969437, y: 0.9758391}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

@@ -1,9 +1,15 @@
 fileFormatVersion: 2
 guid: f8cafddd16fa78c49b54e72bf67cca5f
-timeCreated: 1496045531
+timeCreated: 1499028615
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: wardrobeLifebelt_0
+    21300002: wardrobeLifebelt_1
+    21300004: wardrobeLifebelt_2
+    21300006: wardrobeLifebelt_3
+    21300008: wardrobeLifebelt_4
+    21300010: wardrobeLifebelt_5
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -34,7 +40,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -58,9 +64,95 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: wardrobeLifebelt_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 5
+        width: 48
+        height: 91
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: wardrobeLifebelt_1
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 5
+        width: 48
+        height: 91
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: wardrobeLifebelt_2
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 6
+        width: 48
+        height: 90
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: wardrobeLifebelt_3
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 6
+        width: 48
+        height: 90
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: wardrobeLifebelt_4
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 6
+        width: 48
+        height: 90
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: wardrobeLifebelt_5
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 6
+        width: 48
+        height: 90
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

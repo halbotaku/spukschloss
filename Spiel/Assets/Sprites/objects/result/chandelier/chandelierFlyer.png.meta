@@ -1,9 +1,16 @@
 fileFormatVersion: 2
 guid: a8f0f4be0f6da10488d62194d9f91c1b
-timeCreated: 1496045873
+timeCreated: 1499063140
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: chandelierFlyer_0
+    21300002: chandelierFlyer_1
+    21300004: chandelierFlyer_2
+    21300006: chandelierFlyer_3
+    21300008: chandelierFlyer_5
+    21300010: chandelierFlyer_6
+    21300012: chandelierFlyer_7
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -68,7 +75,85 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: chandelierFlyer_0
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 59
+        width: 47
+        height: 58
+      alignment: 9
+      pivot: {x: 0.46880096, y: 0.9696616}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierFlyer_1
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 58
+        width: 52
+        height: 64
+      alignment: 9
+      pivot: {x: 0.50563973, y: 0.9725057}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierFlyer_3
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 52
+        width: 62
+        height: 70
+      alignment: 9
+      pivot: {x: 0.51419044, y: 0.9664832}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierFlyer_5
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 32
+        width: 67
+        height: 90
+      alignment: 9
+      pivot: {x: 0.52188563, y: 0.9804485}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierFlyer_6
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 0
+        width: 70
+        height: 122
+      alignment: 9
+      pivot: {x: 0.5251373, y: 0.98798066}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: chandelierFlyer_7
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 0
+        width: 69
+        height: 121
+      alignment: 9
+      pivot: {x: 0.5170014, y: 0.990305}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

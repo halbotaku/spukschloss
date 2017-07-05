@@ -11,4 +11,8 @@ public class pathArranger : MonoBehaviour {
     //Create variable for remembering the current path
     public int currentPath = 14;
 
+    //private variables remembering the start positions
+    public float xpos;
+    public float ypos;
+
 }
