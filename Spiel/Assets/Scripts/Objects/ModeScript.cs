@@ -9,7 +9,7 @@ public class ModeScript : MonoBehaviour {
     public bool interactionMode;
 
     //Variables referencing the Pick-Up-Object & Shader
-    private GameObject pickUp;
+    private GameObject pickUpSprite;
     private SpriteOutline shader;
 
     //referencing the player
@@ -19,8 +19,8 @@ public class ModeScript : MonoBehaviour {
     public void Start()
     {
         //reference the pickUp Object & Shader
-        pickUp = gameObject.transform.GetChild(0).gameObject;
-        shader = pickUp.GetComponent<SpriteOutline>();
+        pickUpSprite = gameObject.transform.GetChild(0).gameObject;
+        shader = pickUpSprite.GetComponent<SpriteOutline>();
 
         //disable shader
         shader.enabled = false;
@@ -76,12 +76,7 @@ public class ModeScript : MonoBehaviour {
 
         //if you are an interaction-object
         else
-        {
-            if (!playerMovement.followPlayer)
-            {
-                interactionMode = false;
-            }
-
+        { 
             //reference your interactionList
             InteractionList list = this.gameObject.GetComponent<InteractionList>();
 
@@ -94,8 +89,12 @@ public class ModeScript : MonoBehaviour {
                 }
                 else
                 {
-                    interactionMode = false;
-                }
+                    interactionMode = false;        }
+            }
+
+            if (!playerMovement.followPlayer)
+            {
+                interactionMode = false;
             }
 
             //check if you are in interaction-Mode

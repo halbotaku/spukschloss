@@ -351,7 +351,7 @@ public class pathFollowerGuest : MonoBehaviour
         brokenObject = interactionObject;
 
         //get the according icon GameObject
-        reactionIcon = this.gameObject.transform.GetChild(2).gameObject;
+        reactionIcon = this.gameObject.transform.GetChild(1).gameObject;
 
         //set the reaction Icon Sprite to the according one
         SpriteRenderer renderer = reactionIcon.GetComponent<SpriteRenderer>();
@@ -383,7 +383,7 @@ public class pathFollowerGuest : MonoBehaviour
         }
 
         //Assign the animator
-        patienceCounter = this.gameObject.transform.GetChild(1).gameObject;
+        patienceCounter = this.gameObject.transform.GetChild(0).gameObject;
 
         patienceCounterAnimator = patienceCounter.GetComponent<Animator>();
         patienceCounterAnimator.speed = animationSpeed;

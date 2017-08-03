@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class InteractionSpawn : MonoBehaviour {
 
-    //variables holding the waiting times according to damage intensity
-    public float[] roomWaitingTimes;
-    public float[] receptionWaitingTimes;
-    public float[] repairTimes;
-
     //GameObject Array holding the spawnable interaction Objects
     public GameObject[] spawnPool;
 
@@ -22,7 +17,7 @@ public class InteractionSpawn : MonoBehaviour {
     private GameObject pickedInteraction;
 
     // Use this for initialization
-    public void Start() {
+    public void Awake() {
 
         //go through all the spawn Positions
         for (int i = 0; i < spawnPositions.Length; i++)
@@ -57,6 +52,7 @@ public class InteractionSpawn : MonoBehaviour {
                 CircleCollider2D defaultCollider = pickedInteraction.GetComponent<CircleCollider2D>();
 
                 collider.radius = defaultCollider.radius;
+                collider.offset = defaultCollider.offset;
 
                 //create the modescript component and add the according properties
                 spawnPositions[i].AddComponent<ModeScript>();
@@ -71,9 +67,13 @@ public class InteractionSpawn : MonoBehaviour {
                 InteractionList spawnList = spawnPositions[i].GetComponent<InteractionList>();
                 InteractionList defaultList = pickedInteraction.GetComponent<InteractionList>();
 
-                spawnList.myName = defaultList.myName;
+                spawnList.position = info.myPosition;
 
-                spawnList.pickUpList = new GameObject[defaultList.pickUpList.Length];
+                spawnList.myName = defaultList.myName;
+                spawnList.hotelOwner = defaultList.hotelOwner;
+                spawnList.reactingGuest = info.myReactingGuest;
+
+                spawnList.pickUpList = new string[defaultList.pickUpList.Length];
                 spawnList.animationList = new string[defaultList.pickUpList.Length];
                 spawnList.gradeOfDamage = new string[defaultList.pickUpList.Length];
                 spawnList.inRoomWaitingList = new float[defaultList.pickUpList.Length];
@@ -140,10 +140,4 @@ public class InteractionSpawn : MonoBehaviour {
             }
         }
 	}
-
-
-    void Update()
-    {
-        Debug.Log(pickedInteraction);
-    }
 }

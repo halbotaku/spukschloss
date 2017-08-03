@@ -36,6 +36,8 @@ public class ObjectInteraction : MonoBehaviour {
             //create instance of interactionList
             InteractionList list = other.GetComponent<InteractionList>();
 
+            Debug.Log(list.isCombinable(pickUp.followPlayer));
+
             if (list!=null && list.isCombinable(pickUp.followPlayer))
             {
                 currentInteraction = other.gameObject;

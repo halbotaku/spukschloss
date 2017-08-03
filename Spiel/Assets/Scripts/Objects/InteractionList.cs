@@ -13,7 +13,7 @@ public class InteractionList : MonoBehaviour {
     public string myName;
 
     //List containing possible combination pickUp Objects
-    public GameObject[] pickUpList;
+    public string[] pickUpList;
 
     //List containing states of Animation (depending on pickUp Item)
     public string[] animationList;
@@ -22,160 +22,62 @@ public class InteractionList : MonoBehaviour {
     public string[] gradeOfDamage;
 
     //List containing the time hotel Guest is willing to wait until leaving for reception
-    [NonSerialized] public float[] inRoomWaitingList;
+    public float[] inRoomWaitingList;
 
     //List containing the time hotel guest is willing to wait until leave of the hotel
-    [NonSerialized] public float[] atReceptionWaitingList;
+    public float[] atReceptionWaitingList;
 
     //List containing the necessery times for repairing the occured problem (according to other sequences)
-    [NonSerialized] public float[] repairTime;
+    public float[] repairTime;
 
     //boolean to check whether it has been interacted with befor
-    [NonSerialized] public bool hasBeenInteractedWith = false;
+    [HideInInspector]public bool hasBeenInteractedWith = false;
 
     //variable to save the index of the interaction point
-    [NonSerialized] public int index;
+    [HideInInspector] public int index;
 
     //gameObject referring to the hotel Owner
-    private GameObject hotelOwner;
+    [HideInInspector] public GameObject hotelOwner;
 
     //gameObject remembering the reacting guest
-    private GameObject reactingGuest;
+    [HideInInspector] public GameObject reactingGuest;
+
+    //boolean regulating whether an object is found in the according pick-up list
+    private bool objectCombinable;
 
     public void Start()
     {
         //reference the hotelOwner
         hotelOwner = GameObject.FindGameObjectWithTag("hotelOwner");
-
-        //reference the main Camera for the existing pick-Up-Object List
-        GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        ItemSpawn pickUpPool = mainCamera.GetComponent<ItemSpawn>();
-        InteractionSpawn interactionPool = mainCamera.GetComponent<InteractionSpawn>();
-
-        //define the size of the array & fill it
-        pickUpList = new GameObject[pickUpPool.pickUpItemList.Length];
-
-        for (int i = 0; i < pickUpPool.pickUpItemList.Length; i++)
-        {
-            pickUpList[i] = pickUpPool.pickUpItemList[i];
-        }
-
-        inRoomWaitingList = new float[pickUpList.Length];
-
-        //now check for the waiting times & set them according to the intensity of the damage (at room)
-        for (int i = 0; i < pickUpList.Length; i++)
-        {
-            inRoomWaitingList[i] = checkIntensityRoom(gradeOfDamage[i], interactionPool);
-        }
-
-        atReceptionWaitingList = new float[pickUpList.Length];
-
-        //now check for the waiting times & set them according to the intensity of the damage (at reception)
-        for (int i = 0; i < pickUpList.Length; i++)
-        {
-            atReceptionWaitingList[i] = checkIntensityReception(gradeOfDamage[i], interactionPool);
-        }
-
-        repairTime = new float[pickUpList.Length];
-
-        //now check for the waiting times & set them according to the intensity of the damage (for repair)
-        for (int i = 0; i < pickUpList.Length; i++)
-        {
-            repairTime[i] = checkIntensityReception(gradeOfDamage[i], interactionPool);
-        }
-    }
-
-    private float checkIntensityRoom(string intensity, InteractionSpawn interactionPool)
-    {
-        float result;
-
-        switch (intensity)
-        {
-            case "light":
-                result = interactionPool.roomWaitingTimes[0];
-                break;
-            case "middle":
-                result = interactionPool.roomWaitingTimes[1];
-                break;
-            case "heavy":
-                result = interactionPool.roomWaitingTimes[2];
-                break;
-            case "important":
-                result = interactionPool.roomWaitingTimes[3];
-                break;
-            default:
-                result = interactionPool.roomWaitingTimes[0];
-                break;
-        }
-
-        return result;
-    }
-
-    private float checkIntensityReception(string intensity, InteractionSpawn interactionPool)
-    {
-        float result;
-
-        switch (intensity)
-        {
-            case "light":
-                result = interactionPool.receptionWaitingTimes[0];
-                break;
-            case "middle":
-                result = interactionPool.receptionWaitingTimes[1];
-                break;
-            case "heavy":
-                result = interactionPool.receptionWaitingTimes[2];
-                break;
-            case "important":
-                result = interactionPool.receptionWaitingTimes[3];
-                break;
-            default:
-                result = interactionPool.receptionWaitingTimes[0];
-                break;
-        }
-
-        return result;
-    }
-
-    private float checkIntensityRepair(string intensity, InteractionSpawn interactionPool)
-    {
-        float result;
-
-        switch (intensity)
-        {
-            case "light":
-                result = interactionPool.repairTimes[0];
-                break;
-            case "middle":
-                result = interactionPool.repairTimes[1];
-                break;
-            case "heavy":
-                result = interactionPool.repairTimes[2];
-                break;
-            case "important":
-                result = interactionPool.repairTimes[3];
-                break;
-            default:
-                result = interactionPool.repairTimes[0];
-                break;
-        }
-
-        return result;
     }
 
     public bool isCombinable(GameObject pickUp)
     {
-        return !hasBeenInteractedWith && pickUpList.Contains(pickUp);
+        PickUpInfo infoList = pickUp.GetComponent<PickUpInfo>();
+
+        for (int i = 0; i < pickUpList.Length; i++)
+        {
+            if (pickUpList[i].Contains(infoList.myName))
+            {
+                objectCombinable = true;
+                break;
+            }
+        }
+
+        return !hasBeenInteractedWith && objectCombinable;
     }
 
     public void combine(GameObject pickUp)
     {
         //get index of current object in pickUpList
-        index = Array.IndexOf(pickUpList, pickUp);
+        PickUpInfo infoPickUp = pickUp.GetComponent<PickUpInfo>();
+
+        index = Array.IndexOf(pickUpList, infoPickUp.myName);
 
         Animator animator = GetComponentInChildren<Animator>();
 
         //pick the rightful animation out of the animationList
+        Debug.Log(animationList[index]);
         animator.Play(animationList[index]);
         hasBeenInteractedWith = true;
 

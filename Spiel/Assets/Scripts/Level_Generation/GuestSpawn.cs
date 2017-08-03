@@ -24,7 +24,20 @@ public class GuestSpawn : MonoBehaviour {
         {
             pathArranger arranger = guestPositionList[i].GetComponent<pathArranger>();
 
-            int number = rnd.Next(0, guestTypeList.Length);
+            int number;
+
+            switch (i)
+            {
+                case 8:
+                    number = rnd.Next(4, 6);
+                    break;
+                case 4:
+                    number = 6;
+                    break;
+                default:
+                    number = rnd.Next(0, guestTypeList.Length-3);
+                    break;
+            }
 
             //create the Sprite & add it as a child to the guestPosition
             GameObject sprite = new GameObject();
@@ -114,19 +127,19 @@ public class GuestSpawn : MonoBehaviour {
                 switch (offset)
                 {
                     case 1:
-                        offsetNumber = -1f;
+                        offsetNumber = -0.75f;
                         offset++;
                         break;
                     case 2:
-                        offsetNumber = 1f;
+                        offsetNumber = 0.75f;
                         offset++;
                         break;
                     case 3:
-                        offsetNumber = -1.9f;
+                        offsetNumber = -1.4f;
                         offset++;
                         break;
                     case 4:
-                        offsetNumber = 1.9f;
+                        offsetNumber = 1.4f;
                         offset++;
                         break;
                     case 5:
