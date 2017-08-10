@@ -11,7 +11,7 @@ public class TowerClock : MonoBehaviour {
 
     //duration of the Countdown in minutes
     public float levelLength;
-    private float counter;
+    public float counter;
 
     //getting the UI Window for the TimeOut
     public GameObject timeOutWindow;
@@ -21,7 +21,7 @@ public class TowerClock : MonoBehaviour {
     public int guestCounter;
     private float rotationSpeed;
 
-    public void Start()
+    public void Awake()
     {
         counter = levelLength * 60;
     }

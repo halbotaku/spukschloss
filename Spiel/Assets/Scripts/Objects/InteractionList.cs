@@ -45,10 +45,16 @@ public class InteractionList : MonoBehaviour {
     //boolean regulating whether an object is found in the according pick-up list
     private bool objectCombinable;
 
+    private string hateObject;
+
+
     public void Start()
     {
         //reference the hotelOwner
         hotelOwner = GameObject.FindGameObjectWithTag("hotelOwner");
+
+        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+        hateObject = camera.GetComponent<GuestSpawn>().hateObject;
     }
 
     public bool isCombinable(GameObject pickUp)
@@ -105,8 +111,12 @@ public class InteractionList : MonoBehaviour {
             //create an instance of pathFollowerGuest
             pathFollowerGuest startReactionGuest = reactingGuest.GetComponent<pathFollowerGuest>();
 
-            //Start the proces of the guests' Reaction
-            startReactionGuest.letGuestReact(gameObject, pickUp);
+            bool isSpecial = reactingGuest.GetComponent<pathFollowerGuest>().isSpecial;
+            //Start the process of the guests' Reaction
+            if (isSpecial == true && pickUp.GetComponent<PickUpInfo>().myName == hateObject || isSpecial == false)
+            {
+                startReactionGuest.letGuestReact(gameObject, pickUp);
+            }
         }
 
     }

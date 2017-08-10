@@ -47,12 +47,14 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Camera_and_UI\CameraController.cs" />
+     <Compile Include="Assets\Scripts\Camera_and_UI\GlowEffekt.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\PortraitHandler.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\TowerClock.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\GuestSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\InteractionSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\ItemSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\RoomPositionInteraction.cs" />
+     <Compile Include="Assets\Scripts\Level_Generation\SpecialItemSpawn.cs" />
      <Compile Include="Assets\Scripts\Menus\mainMenu.cs" />
      <Compile Include="Assets\Scripts\Menus\pauseMenu.cs" />
      <Compile Include="Assets\Scripts\Objects\InteractionList.cs" />
@@ -60,6 +62,8 @@
      <Compile Include="Assets\Scripts\Objects\ObjectInteraction.cs" />
      <Compile Include="Assets\Scripts\Objects\ObjectPickUp.cs" />
      <Compile Include="Assets\Scripts\Objects\PickUpInfo.cs" />
+     <Compile Include="Assets\Scripts\Objects\SpecialItem.cs" />
+     <Compile Include="Assets\Scripts\Objects\SpecialPickUp.cs" />
      <Compile Include="Assets\Scripts\Paths\pathArranger.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollower.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollowerGuest.cs" />

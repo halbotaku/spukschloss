@@ -13,6 +13,9 @@ public class GuestSpawn : MonoBehaviour {
     //private variable generating the portrait positions
     private int offset;
 
+    //variable remembering the hated-object of the special guest
+    public string hateObject;
+
     // Use this for initialization
     void Awake () {
 
@@ -114,6 +117,12 @@ public class GuestSpawn : MonoBehaviour {
             if (guestPositionList[i] == guestPositionList[isSpecialGuest])
             {
                 handler.isSpecialGuest = true;
+
+                //assign an item the special guest detests
+                ItemSpawn items = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ItemSpawn>();
+                int hatedObject = rnd.Next(0, items.pickUpItemList.Length);
+
+                hateObject = items.pickUpItemList[hatedObject].GetComponent<PickUpInfo>().myName;
             }
 
             //position the newly generated guest correctly

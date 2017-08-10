@@ -256,7 +256,7 @@ public class pathFollower : MonoBehaviour
             directionReversed = false;
 
             //start doing shit but dont scare me ok
-            Debug.Log("Ich habe nichts zu tun!");
+            //Debug.Log("Ich habe nichts zu tun!");
         }
 
         //when he is at a room on the ground floor except for the reception
@@ -267,7 +267,8 @@ public class pathFollower : MonoBehaviour
         }
 
         //when he is at the ground floor center waypoint
-        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0)
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go back to the waypoint at the reception first
             arranger.currentPath = 14;
@@ -310,9 +311,9 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-        //when he is at the waypoint of the ground floor
-        if (arranger.currentPath == 14 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 ||
-            arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0)
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go to RL1
             arranger.currentPath = 1;
@@ -354,9 +355,9 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-        //when he is at the waypoint of the ground floor
-        if (arranger.currentPath == 14 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 ||
-            arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0)
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go to RL2
             arranger.currentPath = 2;
@@ -398,9 +399,9 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-        //when he is at the waypoint of the ground floor
-        if (arranger.currentPath == 14 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 ||
-            arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0)
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go to RR1
             arranger.currentPath = 3;
@@ -442,9 +443,9 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-        //when he is at the waypoint of the ground floor
-        if (arranger.currentPath == 14 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 ||
-            arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0)
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go to RR1
             arranger.currentPath = 4;
@@ -989,9 +990,9 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-        //when he is at the waypoint of the ground floor
-        if (arranger.currentPath == 14 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 ||
-            arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0)
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go to the center of the upper floor corridor
             arranger.currentPath = 0;

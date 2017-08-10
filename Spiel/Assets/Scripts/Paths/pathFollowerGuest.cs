@@ -57,6 +57,12 @@ public class pathFollowerGuest : MonoBehaviour
     private bool reachedOutside;
     private bool reachedRoom;
 
+    //boolean controlling the accouncement of the special guest
+    [HideInInspector] public bool isSpecial;
+    private bool notReacting;
+    private float warningCountdown;
+    private float silenceCountdown;
+
     //guestCounter for Game-Scor
     public GameObject guestCounter;
 
@@ -106,11 +112,74 @@ public class pathFollowerGuest : MonoBehaviour
         {
             offset = - 0.1f;
         }
+
+        notReacting = true;
+
+        isSpecial = this.gameObject.GetComponentInChildren<PortraitHandler>().isSpecialGuest;
+        silenceCountdown = 15;
+        
+        //reference the according icon GameObject
+        reactionIcon = this.gameObject.transform.GetChild(1).gameObject;
+
+        if (isSpecial == true)
+        {
+
+            //reference the guest Spawn for the hated object
+            GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+            GuestSpawn guests = camera.GetComponent<GuestSpawn>();
+            ItemSpawn items = camera.GetComponent<ItemSpawn>();
+
+            //go through the pick up possibilities and find the one the special guest hates
+            for (int i = 0; i < items.pickUpItemList.Length; i++)
+            {
+                //if the name matches the hated name
+                if (guests.hateObject == items.pickUpItemList[i].GetComponent<PickUpInfo>().myName)
+                {
+
+                    //set the reaction Icon to the hated object image
+                    reactionIcon.GetComponent<SpriteRenderer>().sprite = items.pickUpItemList[i].GetComponent<PickUpInfo>().reactionIcon;
+                }
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isSpecial == true && notReacting == true)
+        {
+            if (warningCountdown > 0)
+            {
+                if (reactionIcon.activeInHierarchy == false)
+                {
+                    reactionIcon.SetActive(true);
+                }
+
+                warningCountdown = warningCountdown - Time.deltaTime;
+            }
+
+            if (warningCountdown < 0)
+            {
+                warningCountdown = 0;
+                silenceCountdown = 15;
+            }
+
+            if (silenceCountdown > 0)
+            {
+                if (reactionIcon.activeInHierarchy == true)
+                {
+                    reactionIcon.SetActive(false);
+                }
+
+                silenceCountdown = silenceCountdown - Time.deltaTime;
+            }
+
+            if (silenceCountdown < 0)
+            {
+                warningCountdown = 10;
+                silenceCountdown = 0;
+            }
+        }
 
         //Check the distance of the object to the next waypoint
         float dist = Vector3.Distance(gameObject.transform.position, arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position);
@@ -385,11 +454,10 @@ public class pathFollowerGuest : MonoBehaviour
 
     public void letGuestReact(GameObject interactionObject, GameObject pickupObject)
     {
+        notReacting = false;
+
         //remember which object caused the reaction
         brokenObject = interactionObject;
-
-        //get the according icon GameObject
-        reactionIcon = this.gameObject.transform.GetChild(1).gameObject;
 
         //set the reaction Icon Sprite to the according one
         SpriteRenderer renderer = reactionIcon.GetComponent<SpriteRenderer>();
@@ -557,6 +625,8 @@ public class pathFollowerGuest : MonoBehaviour
         directionReversed = false;
         goingToReception = false;
         idleInRoom = true;
+
+        notReacting = true;
     }
 
     private void startLeaving()

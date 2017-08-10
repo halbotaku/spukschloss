@@ -42,7 +42,6 @@ public class RepairScript : MonoBehaviour {
 
         if (isRepairing == true)
         {
-            Debug.Log(countdown);
 
             //handle the countdown of the repair time
             if (countdown > 0)
