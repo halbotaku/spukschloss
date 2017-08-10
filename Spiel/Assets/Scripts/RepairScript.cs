@@ -19,9 +19,6 @@ public class RepairScript : MonoBehaviour {
     private GameObject repairTimer;
     private Animator repairTimeAnimator;
 
-    //booleans controlling the waiting times
-    private bool goingToRepair = false;
-
     // Use this for initialization
     void Start () {
 
