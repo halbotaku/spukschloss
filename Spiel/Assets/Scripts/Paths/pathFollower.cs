@@ -32,6 +32,16 @@ public class pathFollower : MonoBehaviour
     //Animator for Controlling the hotelowner animations
     private Animator myAnimator;
 
+    //RepairScript reference
+    private RepairScript repairScript;
+
+    //referencing the repairLists
+    public List<string> roomRepairList;
+    public List<string> objectRepairList;
+
+    //bool handling repair
+    public bool isRepairing;
+
 
     private void Awake()
     {
@@ -44,6 +54,14 @@ public class pathFollower : MonoBehaviour
         //set the current way to the one at the reception
         arranger.currentPath = 14;
         directionReversed = false;
+        isRepairing = false;
+
+        //reference the repairScript
+        repairScript = GetComponent<RepairScript>();
+
+        //reference the repairLists
+        roomRepairList = repairScript.roomRepairList;
+        objectRepairList = repairScript.objectRepairList;
     }
 
 
@@ -51,6 +69,17 @@ public class pathFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //when there are no objects to repair
+        if (objectRepairList.Count == 0)
+        {
+            //head for the reception
+            destination = "reception";
+        }
+        else
+        {
+            //pick the first object out of the list and make it your destination
+            destination = roomRepairList[0];
+        }
 
         //Check the distance of the object to the next waypoint
         float dist = Vector3.Distance(gameObject.transform.position, arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position);
@@ -226,7 +255,7 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
+            //start doing shit but dont scare me ok
             Debug.Log("Ich habe nichts zu tun!");
         }
 
@@ -258,8 +287,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at the room next door
@@ -298,8 +331,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at the room next door
@@ -338,8 +375,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at the room next door
@@ -378,8 +419,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at the room next door
@@ -418,8 +463,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper left side of the house
@@ -470,8 +519,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper left side of the house
@@ -521,8 +574,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper left side of the house
@@ -573,8 +630,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper left side of the house
@@ -625,8 +686,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper right side of the house
@@ -676,8 +741,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper right side of the house
@@ -727,8 +796,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper right side of the house
@@ -778,8 +851,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper right side of the house
@@ -829,8 +906,12 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //TO DO: CALMING OF GUESTS
-            Debug.Log("Ich kann jetzt mit reparieren anfangen!");
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
         }
 
         //when he is at any other room on the upper right side of the house

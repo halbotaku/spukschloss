@@ -10,8 +10,8 @@ public class ObjectInteraction : MonoBehaviour {
     //create GameObject for the current interaction object
     private GameObject currentInteraction = null;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         pickUp = GetComponent<ObjectPickUp>();
     }
 	
@@ -22,6 +22,8 @@ public class ObjectInteraction : MonoBehaviour {
         {
             //trigger the interaction
             currentInteraction.GetComponent<InteractionList>().combine(pickUp.followPlayer);
+
+            //delete the used pick up item
             Destroy(pickUp.followPlayer);
         }
 		
@@ -35,8 +37,6 @@ public class ObjectInteraction : MonoBehaviour {
         {
             //create instance of interactionList
             InteractionList list = other.GetComponent<InteractionList>();
-
-            Debug.Log(list.isCombinable(pickUp.followPlayer));
 
             if (list!=null && list.isCombinable(pickUp.followPlayer))
             {

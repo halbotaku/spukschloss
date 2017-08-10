@@ -4,83 +4,70 @@ using UnityEngine;
 
 public class RepairScript : MonoBehaviour {
 
-    //Variable for referencing the current GameObject Skript pathFollower
-    private pathFollower hotelOwner;
+    //boolean remembering the repair process
     private bool isRepairing;
 
-    //ArrayList remebering the destinations & according Objects
-    public List<string> roomRepairList = new List<string>();
-    public List<string> objectRepairList = new List<string>();
+    //ArrayList remembering the destinations & according Objects
+    public List<string> roomRepairList;
+    public List<string> objectRepairList;
 
-    //boolean evaluating whether hotelOwner has reached the destination yet
-    private bool reachedDestination;
+    //Variables remembering the object and acccording animator
+    private InteractionList interactionList;
+    private Animator animator;
+
+    //variable controlling the countdown of the repairtime
+    private float countdown;
 
     //Variables for calling the animatior of the repair timer
     private GameObject repairTimer;
     private Animator repairTimeAnimator;
 
-    // Use this for initialization
-    void Start () {
+    void Awake()
+    {
+        roomRepairList = new List<string>();
+        objectRepairList = new List<string>();
+    }
 
-        //Reference the pathFollower belonging to the current GameObject
-		hotelOwner = GetComponent<pathFollower>();
+    void Start() {
+        //hotelOwner is not repairing in the beginning
+        isRepairing = false;
 
         //reference the timer GameObject & Animator
         repairTimer = gameObject.transform.GetChild(1).gameObject;
         repairTimeAnimator = repairTimer.GetComponent<Animator>();
         repairTimer.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void LateUpdate () {
 
-        //check for current destination
-        if (!isRepairing)
+    void Update() {
+
+        if (isRepairing == true)
         {
-            if (roomRepairList.Count == 0 && objectRepairList.Count == 0)
-            {
-                hotelOwner.destination = "reception";
-            }
-            else
-            {
-                hotelOwner.destination = roomRepairList[0];
-            }
+            Debug.Log(countdown);
 
-            //check the current destination
-            if (hotelOwner.destination == "reception")
+            //handle the countdown of the repair time
+            if (countdown > 0)
             {
-                //TO DO: CHECK FOR CALMING HOTELGUESTS WANTING TO CHECK OUT
-                Debug.Log("Ich habe nichts zu tun!");
+                //TO DO: REPAIR ANIMATION
+
+                //reduce the countdown
+                countdown = countdown - Time.deltaTime;
             }
             else
             {
-                //set Repair-Boolean to true
-                isRepairing = true;
+                //continue after the waiting time
+                isRepairing = false;
+                handleRepairFinish();
             }
         }
-		
-	}
+    }
 
-    IEnumerator goToRepair()
+    public void repair()
     {
-        
-        //wait for a second before reacting to the called repair
-        yield return new WaitForSeconds(1);
-
-        //activate check whether end has been reached
-        reachedDestination = hotelOwner.currentWaypoint + 1 == hotelOwner.arranger.paths[hotelOwner.arranger.currentPath].transform.childCount;
-
-        while (reachedDestination == false)
-        {
-            yield return null;
-            reachedDestination = hotelOwner.currentWaypoint + 1 == hotelOwner.arranger.paths[hotelOwner.arranger.currentPath].transform.childCount;
-        }
-
         //find the listed object whithin the specified room
         GameObject toRepair = GameObject.Find(objectRepairList[0]);
 
         //get the InteractionList Component
-        InteractionList interactionList = toRepair.GetComponent<InteractionList>();
+        interactionList = toRepair.GetComponent<InteractionList>();
 
         if (interactionList.position == roomRepairList[0])
         {
@@ -105,25 +92,27 @@ public class RepairScript : MonoBehaviour {
 
             repairTimer.SetActive(true);
 
-            Animator animator = interactionList.GetComponentInChildren<Animator>();
+            animator = interactionList.GetComponentInChildren<Animator>();
 
-            //wait for the needed repair time length
-            yield return new WaitForSeconds(interactionList.repairTime[interactionList.index]);
-
-            //pick the rightful animation out of the animationList
-            animator.Play("repaired");
-            interactionList.hasBeenInteractedWith = false;
-
-            //remove the first entries of room and repair object lists
-            roomRepairList.RemoveAt(0);
-            objectRepairList.RemoveAt(0);
-
-            //set Repair-Boolean to false
-            isRepairing = false;
-
-            //deactivate the timer
-            repairTimer.SetActive(false);
+            //handle waiting for the repairtime length
+            countdown = interactionList.repairTime[interactionList.index];
+            isRepairing = true;
         }
+    }
+
+    private void handleRepairFinish() {
+        //pick the rightful animation out of the animationList
+        animator.Play("repaired");
+        interactionList.hasBeenInteractedWith = false;
+
+        //remove the first entries of room and repair object lists
+        roomRepairList.RemoveAt(0);
+        objectRepairList.RemoveAt(0);
+
+        //deactivate the timer
+        repairTimer.SetActive(false);
+
+        this.gameObject.GetComponent<pathFollower>().isRepairing = false;
     }
 
 
