@@ -19,6 +19,9 @@ public class RepairScript : MonoBehaviour {
     private GameObject repairTimer;
     private Animator repairTimeAnimator;
 
+    //booleans controlling the waiting times
+    private bool goingToRepair = false;
+
     // Use this for initialization
     void Start () {
 
@@ -56,10 +59,6 @@ public class RepairScript : MonoBehaviour {
             {
                 //set Repair-Boolean to true
                 isRepairing = true;
-
-                //wait for a second before reacting to the called repair
-                StartCoroutine(goToRepair());
-
             }
         }
 		

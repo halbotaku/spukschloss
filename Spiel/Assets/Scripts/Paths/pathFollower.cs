@@ -30,13 +30,19 @@ public class pathFollower : MonoBehaviour {
     //Array for saving the rooms & items in need of repair
     private string[] repairObjectList;
     private string[] roomList;
+
+    //Animator for Controlling the hotelowner animations
+    private Animator myAnimator;
  
     
-    // This function is called just one time by Unity the moment the game loads
     private void Awake()
     {
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
         mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        // get a reference to the Animator for controlling the states of the animation
+        myAnimator = GetComponentInChildren<Animator>();
+        go = false;
     }
 	
 	
@@ -50,6 +56,12 @@ public class pathFollower : MonoBehaviour {
         //Check if Object is set to Movement
         if (go)
         {
+            //only start the play animation when you have stood before, otherweise avoid a reload
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
+            {
+                myAnimator.Play("walk");
+            }
+
             //check your destination
             getPath();
 
@@ -63,11 +75,7 @@ public class pathFollower : MonoBehaviour {
             {           if (directionReversed == false)
                         {
 
-                            if (currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
-                            {
-                                //TO DO
-                            }
-                            else
+                            if (currentWaypoint + 1 != arranger.paths[arranger.currentPath].transform.childCount)
                             {
                                 //increase the counting value to move to the next waypoint
                                 currentWaypoint++;
@@ -81,11 +89,7 @@ public class pathFollower : MonoBehaviour {
                                     //decrease the counting value to move to the previous waypoint (backwards)
                                     currentWaypoint--;
                                 }
-                                else
-                                {
-                                    //TO DO
-                                }
-                }
+                        }
                }
          }
     }

@@ -76,14 +76,21 @@ public class pathFollowerGuest : MonoBehaviour
     float offset;
     public bool floorPositionTop;
 
+    //Animation Controller
+    private Animator myAnimator;
+
     // This function is called just one time by Unity the moment the game loads
-    private void Awake()
+    private void Start()
     {
+
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
         mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         //save the speed value into a variable for switching between idling and going speed
         tempSpeed = speed;
+
+        // get a reference to the Animator for controlling the states of the animation
+        myAnimator = GetComponentInChildren<Animator>();
 
         //Set idling time for counting down
         idleCountdown = idlingTime;
@@ -124,6 +131,12 @@ public class pathFollowerGuest : MonoBehaviour
         //Check if minimum Distance is achieved, if so go to next waypoint
         if (dist > minDist)
         {
+            //only start the play animation when you have stood before, otherweise avoid a reload
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
+            {
+                myAnimator.Play("walk");
+            }
+
             //Move the Object to next waypoint
             Move();
         }
@@ -138,6 +151,12 @@ public class pathFollowerGuest : MonoBehaviour
                     {
                         if (idleCountdown > 0)
                         {
+                            //only stop the play animation when you have walked before, otherweise avoid a reload
+                            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+                            {
+                                myAnimator.Play("stand");
+                            }
+
                             idleCountdown = idleCountdown - Time.deltaTime;
                         }
                         else
@@ -174,6 +193,12 @@ public class pathFollowerGuest : MonoBehaviour
                     {
                         if (idleCountdown > 0)
                         {
+                            //only stop the play animation when you have walked before, otherweise avoid a reload
+                            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+                            {
+                                myAnimator.Play("stand");
+                            }
+
                             idleCountdown = idleCountdown - Time.deltaTime;
                         }
                         else
@@ -210,6 +235,12 @@ public class pathFollowerGuest : MonoBehaviour
         //Handle the in-Room-Waiting Countdown
         if (isWaitingInRoom == true && roomWaitingCountdown > 0)
         {
+            //only stop the play animation when you have walked before, otherweise avoid a reload
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+            {
+                myAnimator.Play("stand");
+            }
+
             roomWaitingCountdown -= Time.deltaTime;
 
             if (roomWaitingCountdown <= 0)
@@ -249,6 +280,7 @@ public class pathFollowerGuest : MonoBehaviour
         {
             goingToReception = false;
             reachedReception = false;
+
             startWaitingAtReception();
         }
 
@@ -256,6 +288,12 @@ public class pathFollowerGuest : MonoBehaviour
         //Handle the at-Reception-Waiting Countdown
         if (isWaitingAtReception == true && receptionWaitingCountdown > 0)
         {
+            //only stop the play animation when you have walked before, otherweise avoid a reload
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+            {
+                myAnimator.Play("stand");
+            }
+
             receptionWaitingCountdown -= Time.deltaTime;
 
             if (receptionWaitingCountdown <= 0)

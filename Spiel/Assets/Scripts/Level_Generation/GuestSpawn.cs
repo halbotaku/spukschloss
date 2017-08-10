@@ -14,7 +14,7 @@ public class GuestSpawn : MonoBehaviour {
     private int offset;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
 
         int isSpecialGuest = rnd.Next(0, guestPositionList.Length);
         offset = 1;
@@ -59,6 +59,13 @@ public class GuestSpawn : MonoBehaviour {
             spriteRenderer.sortingLayerName = defaultRenderer.sortingLayerName;
             spriteRenderer.sortingOrder = defaultRenderer.sortingOrder;
 
+            //create the Animator & add properties
+            sprite.AddComponent<Animator>();
+
+            Animator anim = sprite.GetComponent<Animator>();
+            Animator defaultAnim = defaultSprite.GetComponent<Animator>();
+
+            anim.runtimeAnimatorController = defaultAnim.runtimeAnimatorController;
 
             //create the Portrait
             GameObject portrait = new GameObject();
@@ -143,35 +150,35 @@ public class GuestSpawn : MonoBehaviour {
                         offset++;
                         break;
                     case 5:
-                        offsetNumber = -2.8f;
+                        offsetNumber = -2.95f;
                         offset++;
                         break;
                     case 6:
-                        offsetNumber = 2.8f;
+                        offsetNumber = 2.89f;
                         offset++;
                         break;
                     case 7:
-                        offsetNumber = -3.7f;
+                        offsetNumber = -3.85f;
                         offset++;
                         break;
                     case 8:
-                        offsetNumber = 3.7f;
+                        offsetNumber = 3.79f;
                         offset++;
                         break;
                     case 9:
-                        offsetNumber = -4.6f;
+                        offsetNumber = -4.75f;
                         offset++;
                         break;
                     case 10:
-                        offsetNumber = 4.6f;
+                        offsetNumber = 4.69f;
                         offset++;
                         break;
                     case 11:
-                        offsetNumber = -5.5f;
+                        offsetNumber = -5.65f;
                         offset++;
                         break;
                     case 12:
-                        offsetNumber = 5.5f;
+                        offsetNumber = 5.59f;
                         offset++;
                         break;
                     default:
@@ -186,10 +193,4 @@ public class GuestSpawn : MonoBehaviour {
             }
         }
     }
-		
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

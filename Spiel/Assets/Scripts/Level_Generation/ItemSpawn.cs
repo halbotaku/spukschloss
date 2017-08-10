@@ -156,59 +156,59 @@ public class ItemSpawn : MonoBehaviour
                 break;
 
             case "purse":
-                //spawnPurTelCanBell(pickUp);
+                spawnPurTelCanBell(pickUp);
                 break;
 
             case "towel":
-                //spawnTowel(pickUp);
+                spawnTowel(pickUp);
                 break;
 
             case "telephone":
-                //spawnPurTelCanBell(pickUp);
+                spawnPurTelCanBell(pickUp);
                 break;
 
             case "seed":
-                //spawnSeed(pickUp);
+                spawnSeed(pickUp);
                 break;
 
             case "candle":
-                //spawnPurTelCanBell(pickUp);
+                spawnPurTelCanBell(pickUp);
                 break;
 
             case "bell":
-                //spawnPurTelCanBell(pickUp);
+                spawnPurTelCanBell(pickUp);
                 break;
 
             case "flyer":
-                //spawnFlyer(pickUp);
+                spawnFlyer(pickUp);
                 break;
 
             case "mat":
-                //spawnMatt(pickUp);
+                spawnMatt(pickUp);
                 break;
 
             case "eggs":
-                //spawnEggsPanTurkey(pickUp);
+                spawnEggsPanTurkey(pickUp);
                 break;
 
             case "pan":
-                //spawnEggsPanTurkey(pickUp);
+                spawnEggsPanTurkey(pickUp);
                 break;
 
             case "turkey":
-                //spawnEggsPanTurkey(pickUp);
+                spawnEggsPanTurkey(pickUp);
                 break;
 
             case "underwear":
-                //spawnUnderwear(pickUp);
+                spawnUnderwear(pickUp);
                 break;
 
             case "lifesaverring":
-                //spawnRingMegaphone(pickUp);
+                spawnRingMegaphone(pickUp);
                 break;
 
             case "megaphone":
-                //spawnRingMegaphone(pickUp);
+                spawnRingMegaphone(pickUp);
                 break;
 
             default:
@@ -257,7 +257,32 @@ public class ItemSpawn : MonoBehaviour
                     spiderS.Add(pick);
                     break;
 
-                default:
+                case 5:
+                    pickUp.transform.position = spiderPos.transform.GetChild(5).position;
+                    spiderS.Add(pick);
+                    break;
+
+                case 6:
+                    pickUp.transform.position = spiderPos.transform.GetChild(6).position;
+                    spiderS.Add(pick);
+                    break;
+
+                case 7:
+                    pickUp.transform.position = spiderPos.transform.GetChild(7).position;
+                    spiderS.Add(pick);
+                    break;
+
+                case 8:
+                    pickUp.transform.position = spiderPos.transform.GetChild(8).position;
+                    spiderS.Add(pick);
+                    break;
+
+                case 9:
+                    pickUp.transform.position = spiderPos.transform.GetChild(9).position;
+                    spiderS.Add(pick);
+                    break;
+
+            default:
                     Debug.Log("Beim Spawn der Spinne ist etwas schief gelaufen!");
                     break;
             }
@@ -327,6 +352,111 @@ public class ItemSpawn : MonoBehaviour
                 purseS.Add(pick);
                 break;
 
+            case 10:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(10).position;
+                purseS.Add(pick);
+                break;
+
+            case 11:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(11).position;
+                purseS.Add(pick);
+                break;
+
+            case 12:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(12).position;
+                purseS.Add(pick);
+                break;
+
+            case 13:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(13).position;
+                purseS.Add(pick);
+                break;
+
+            case 14:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(14).position;
+                purseS.Add(pick);
+                break;
+
+            case 15:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(15).position;
+                purseS.Add(pick);
+                break;
+
+            case 16:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(16).position;
+                purseS.Add(pick);
+                break;
+
+            case 17:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(17).position;
+                purseS.Add(pick);
+                break;
+
+            case 18:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(18).position;
+                purseS.Add(pick);
+                break;
+
+            case 19:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(19).position;
+                purseS.Add(pick);
+                break;
+
+            case 20:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(20).position;
+                purseS.Add(pick);
+                break;
+
+            case 21:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(21).position;
+                purseS.Add(pick);
+                break;
+
+            case 22:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(22).position;
+                purseS.Add(pick);
+                break;
+
+            case 23:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(23).position;
+                purseS.Add(pick);
+                break;
+
+            case 24:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(24).position;
+                purseS.Add(pick);
+                break;
+
+            case 25:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(25).position;
+                purseS.Add(pick);
+                break;
+
+            case 26:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(26).position;
+                purseS.Add(pick);
+                break;
+
+            case 27:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(27).position;
+                purseS.Add(pick);
+                break;
+
+            case 28:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(28).position;
+                purseS.Add(pick);
+                break;
+
+            case 29:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(29).position;
+                purseS.Add(pick);
+                break;
+
+            case 30:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(30).position;
+                purseS.Add(pick);
+                break;
+
             default:
                 Debug.Log("Beim Spawn der von Klingel, Telefon, Kerze oder Tasche ist etwas schief gelaufen!");
                 break;
@@ -340,29 +470,72 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(2).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (towelS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                towelS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                towelS.Add(pick);
                 break;
 
             case 2:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(2).position;
+                towelS.Add(pick);
                 break;
 
             case 3:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(3).position;
+                towelS.Add(pick);
                 break;
 
             case 4:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(4).position;
+                towelS.Add(pick);
+                break;
+
+            case 5:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(5).position;
+                towelS.Add(pick);
+                break;
+
+            case 6:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(6).position;
+                towelS.Add(pick);
+                break;
+
+            case 7:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(7).position;
+                towelS.Add(pick);
+                break;
+
+            case 8:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(8).position;
+                towelS.Add(pick);
+                break;
+
+            case 9:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(9).position;
+                towelS.Add(pick);
+                break;
+
+            case 10:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(10).position;
+                towelS.Add(pick);
+                break;
+
+            case 11:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(11).position;
+                towelS.Add(pick);
                 break;
 
             default:
@@ -377,29 +550,62 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(3).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (seedS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                seedS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                seedS.Add(pick);
                 break;
 
             case 2:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(2).position;
+                seedS.Add(pick);
                 break;
 
             case 3:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(3).position;
+                seedS.Add(pick);
                 break;
 
             case 4:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(4).position;
+                seedS.Add(pick);
+                break;
+
+            case 5:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(5).position;
+                seedS.Add(pick);
+                break;
+
+            case 6:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(6).position;
+                seedS.Add(pick);
+                break;
+
+            case 7:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(7).position;
+                seedS.Add(pick);
+                break;
+
+            case 8:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(8).position;
+                seedS.Add(pick);
+                break;
+
+            case 9:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(9).position;
+                seedS.Add(pick);
                 break;
 
             default:
@@ -414,29 +620,62 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(4).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (flyerS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                flyerS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                flyerS.Add(pick);
                 break;
 
             case 2:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(2).position;
+                flyerS.Add(pick);
                 break;
 
             case 3:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(3).position;
+                flyerS.Add(pick);
                 break;
 
             case 4:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(4).position;
+                flyerS.Add(pick);
+                break;
+
+            case 5:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(5).position;
+                flyerS.Add(pick);
+                break;
+
+            case 6:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(6).position;
+                flyerS.Add(pick);
+                break;
+
+            case 7:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(7).position;
+                flyerS.Add(pick);
+                break;
+
+            case 8:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(8).position;
+                flyerS.Add(pick);
+                break;
+
+            case 9:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(9).position;
+                flyerS.Add(pick);
                 break;
 
             default:
@@ -452,29 +691,37 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(5).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (flyerS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                eggS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                eggS.Add(pick);
                 break;
 
             case 2:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(2).position;
+                eggS.Add(pick);
                 break;
 
             case 3:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(3).position;
+                eggS.Add(pick);
                 break;
 
             case 4:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(4).position;
+                eggS.Add(pick);
                 break;
 
             default:
@@ -489,29 +736,62 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(6).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (seedS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                matS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                matS.Add(pick);
                 break;
 
             case 2:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(2).position;
+                matS.Add(pick);
                 break;
 
             case 3:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(3).position;
+                matS.Add(pick);
                 break;
 
             case 4:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(4).position;
+                matS.Add(pick);
+                break;
+
+            case 5:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(5).position;
+                matS.Add(pick);
+                break;
+
+            case 6:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(6).position;
+                matS.Add(pick);
+                break;
+
+            case 7:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(7).position;
+                matS.Add(pick);
+                break;
+
+            case 8:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(8).position;
+                matS.Add(pick);
+                break;
+
+            case 9:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(9).position;
+                matS.Add(pick);
                 break;
 
             default:
@@ -526,33 +806,71 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(7).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (seedS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                underwearS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                underwearS.Add(pick);
                 break;
 
             case 2:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(2).position;
+                underwearS.Add(pick);
                 break;
 
             case 3:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(3).position;
+                underwearS.Add(pick);
                 break;
 
             case 4:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(4).position;
+                underwearS.Add(pick);
+                break;
+
+            case 5:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(5).position;
+                underwearS.Add(pick);
+                break;
+
+            case 6:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(6).position;
+                underwearS.Add(pick);
+                break;
+
+            case 7:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(7).position;
+                underwearS.Add(pick);
+                break;
+
+            case 8:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(8).position;
+                underwearS.Add(pick);
+                break;
+
+            case 9:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(9).position;
+                underwearS.Add(pick);
+                break;
+
+            case 10:
+                pickUp.transform.position = newSpawnPos.transform.GetChild(10).position;
+                underwearS.Add(pick);
                 break;
 
             default:
-                Debug.Log("Beim Spawn der Matte ist etwas schief gelaufen!");
+                Debug.Log("Beim Spawn der Unterwäsche ist etwas schief gelaufen!");
                 break;
         }
     }
@@ -563,17 +881,22 @@ public class ItemSpawn : MonoBehaviour
         GameObject newSpawnPos = spawnPos.transform.GetChild(8).gameObject;
 
         //pick one of the spawn positions
-        int pick = rnd.Next(0, newSpawnPos.transform.childCount);
+        int pick;
+
+        do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
+        while (seedS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
         {
             case 0:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(0).position;
+                ringS.Add(pick);
                 break;
 
             case 1:
                 pickUp.transform.position = newSpawnPos.transform.GetChild(1).position;
+                ringS.Add(pick);
                 break;
 
             default:
