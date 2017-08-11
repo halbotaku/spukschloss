@@ -27,3 +27,5 @@ C:\Users\Mandy\Documents\GitHub\spukschloss\Spiel\Temp\bin\Debug\UnityEngine.Hol
 C:\Users\Mandy\Documents\GitHub\spukschloss\Spiel\Temp\bin\Debug\UnityEngine.VR.xml
 C:\Users\Mandy\Documents\GitHub\spukschloss\Spiel\obj\Debug\Assembly-CSharp.dll
 C:\Users\Mandy\Documents\GitHub\spukschloss\Spiel\obj\Debug\Assembly-CSharp.pdb
+C:\Users\Mandy\Documents\GitHub\spukschloss\Spiel\Temp\bin\Debug\Assembly-CSharp.dll.CodeAnalysisLog.xml
+C:\Users\Mandy\Documents\GitHub\spukschloss\Spiel\Temp\bin\Debug\Assembly-CSharp.dll.lastcodeanalysissucceeded

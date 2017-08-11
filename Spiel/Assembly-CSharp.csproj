@@ -62,12 +62,12 @@
      <Compile Include="Assets\Scripts\Objects\ObjectInteraction.cs" />
      <Compile Include="Assets\Scripts\Objects\ObjectPickUp.cs" />
      <Compile Include="Assets\Scripts\Objects\PickUpInfo.cs" />
+     <Compile Include="Assets\Scripts\Objects\RepairScript.cs" />
      <Compile Include="Assets\Scripts\Objects\SpecialItem.cs" />
      <Compile Include="Assets\Scripts\Objects\SpecialPickUp.cs" />
      <Compile Include="Assets\Scripts\Paths\pathArranger.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollower.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollowerGuest.cs" />
-     <Compile Include="Assets\Scripts\RepairScript.cs" />
      <Compile Include="Assets\Scripts\player\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\shader\SpriteOutline.cs" />
      <None Include="Assets\Scripts\shader\Sprites-Outline.shader" />

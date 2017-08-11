@@ -11,6 +11,8 @@ public class SpecialItem : MonoBehaviour {
     public string myName;
     public Vector2 newSpeed;
     public float speedDuration;
+    public float slipRecoveryDuration;
+    public float timeUntilScreamExplodes;
 
 	// Use this for initialization
 	void Start () {

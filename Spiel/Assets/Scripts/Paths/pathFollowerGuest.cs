@@ -85,6 +85,13 @@ public class pathFollowerGuest : MonoBehaviour
     //Animation Controller
     private Animator myAnimator;
 
+    //referencing the specialItems Script for reacting to the scream
+    private SpecialPickUp specialItemScream;
+    private bool cryOut;
+    private bool leave;
+    private bool dummy;
+    private bool cry;
+
     // This function is called just one time by Unity the moment the game loads
     private void Start()
     {
@@ -141,6 +148,11 @@ public class pathFollowerGuest : MonoBehaviour
                 }
             }
         }
+
+        //referencing the scream
+        specialItemScream = GameObject.FindGameObjectWithTag("Player").GetComponent<SpecialPickUp>();
+        cryOut = false;
+        dummy = false;
     }
 
     // Update is called once per frame
@@ -178,6 +190,56 @@ public class pathFollowerGuest : MonoBehaviour
             {
                 warningCountdown = 10;
                 silenceCountdown = 0;
+            }
+        }
+
+        if (isSpecial == false && notReacting == true)
+        {
+            //if you are not unafraid of ghosts and the chosen victim for the scream item
+            if (specialItemScream.victim == room || dummy == true)
+            {
+                if (room != null)
+                {
+                    room = null;
+                    dummy = true;
+                    goingToReception = true;
+
+                    directionReversed = false;
+                    idleInRoom = false;
+
+                    speed = 10;
+
+                    arranger.currentPath = 1;
+                    currentWaypoint = 0;
+
+                    cryOut = true;
+                }
+
+                if (cryOut == true)
+                {
+                    if (currentWaypoint == arranger.paths[1].transform.childCount - 2)
+                    {
+                        cryOut = false;
+                        goingToReception = false;
+                        arranger.currentPath = 2;
+                        currentWaypoint = 0;
+                        leave = true;
+                    }
+                }
+
+                if (leave == true && arranger.currentPath == 2 && currentWaypoint==0)
+                {
+                    leave = false;
+                    currentWaypoint++;
+
+                    cry = true;
+                }
+
+                if (cry == true && arranger.currentPath == 2 && currentWaypoint == 1 && gameObject.transform.position.y < -6.25)
+                {
+                    startLeaving();
+                    cry = false;
+                }
             }
         }
 
@@ -468,8 +530,6 @@ public class pathFollowerGuest : MonoBehaviour
         PickUpInfo info = pickupItem.GetComponent<PickUpInfo>();
 
         renderer.sprite = info.reactionIcon;
-        
-        //PickUpInfo info = brokenObject.GetComponent<PickUpInfo>();
 
         //call the time the guest is willing to wait until repair
         InteractionList list = interactionObject.GetComponent<InteractionList>();

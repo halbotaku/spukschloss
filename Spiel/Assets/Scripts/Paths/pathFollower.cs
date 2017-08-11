@@ -42,6 +42,9 @@ public class pathFollower : MonoBehaviour
     //bool handling repair
     public bool isRepairing;
 
+    //bool handling the slip on the magic banana
+    public bool isSlipping;
+
 
     private void Awake()
     {
@@ -62,6 +65,8 @@ public class pathFollower : MonoBehaviour
         //reference the repairLists
         roomRepairList = repairScript.roomRepairList;
         objectRepairList = repairScript.objectRepairList;
+
+        isSlipping = false;
     }
 
 
@@ -102,32 +107,28 @@ public class pathFollower : MonoBehaviour
         {
             if (directionReversed == false)
             {
-                //When hotelowner has reached the end of the path
-                if (currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
-                {
-                    //TO DO REPAIR-SEQUENCE
-                }
-
                 //When hotelowner has not reached the end of the path yet
-                else
+                if (currentWaypoint + 1 != arranger.paths[arranger.currentPath].transform.childCount)
                 {
-                    //increase the counting value to move to the next waypoint
-                    currentWaypoint++;
+                    //if the hotelowner is not slipping right now
+                    if (isSlipping == false)
+                    {
+                        //increase the counting value to move to the next waypoint
+                        currentWaypoint++;
+                    }
                 }
             }
             //When direction is set to be reversed
             else
             {
                 //When hotelowner has reached the end of path (beginning waypoint)
-                if (currentWaypoint == 0)
+                if (currentWaypoint != 0)
                 {
-                    //TO DO REPAIR-SEQUENCE
-                }
-                //When hotel guest has not reached the beginning yet
-                else
-                {
-                    //decrease the counting value to move to the previous waypoint
-                    currentWaypoint--;
+                    if (isSlipping == false)
+                    {
+                        //decrease the counting value to move to the previous waypoint
+                        currentWaypoint--;
+                    }
                 }
             }
         }
