@@ -45,6 +45,9 @@ public class pathFollower : MonoBehaviour
     //bool handling the slip on the magic banana
     public bool isSlipping;
 
+    //sprite of the hotel owner character
+    private GameObject hotelOwnerSprite;
+
 
     private void Awake()
     {
@@ -67,6 +70,9 @@ public class pathFollower : MonoBehaviour
         objectRepairList = repairScript.objectRepairList;
 
         isSlipping = false;
+
+        //reference the hotelownersprite
+        hotelOwnerSprite = this.gameObject.transform.GetChild(0).gameObject;
     }
 
 
@@ -74,6 +80,9 @@ public class pathFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //control the optical disappearance when going through walls
+        checkWalls();
+
         //when there are no objects to repair
         if (objectRepairList.Count == 0)
         {
@@ -249,7 +258,8 @@ public class pathFollower : MonoBehaviour
         }
     }
 
-    private void checkReceptionPath() {
+    private void checkReceptionPath()
+    {
 
         //when he is at the reception already then he has got nothing to do besides awaiting guests
         if (arranger.currentPath == 14 && currentWaypoint == 2)
@@ -268,7 +278,7 @@ public class pathFollower : MonoBehaviour
         }
 
         //when he is at the ground floor center waypoint
-        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0 
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
             || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
             //go back to the waypoint at the reception first
@@ -480,15 +490,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for the pool out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true|| arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true|| 
-                arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to the pool
-                arranger.currentPath = 5;
-                currentWaypoint = 1;
-                directionReversed = false;
-            }
+        //when you are heading for the pool out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 5;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper right side of the house
         if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
@@ -536,15 +546,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for RL out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to the pool
-                arranger.currentPath = 6;
-                currentWaypoint = 1;
-                directionReversed = false;
-            }
+        //when you are heading for RL out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 6;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper right side of the house
         if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
@@ -570,7 +580,8 @@ public class pathFollower : MonoBehaviour
         }
     }
 
-    private void checkRTL1Path() {
+    private void checkRTL1Path()
+    {
         //when he is at the RTL1 already
         if (arranger.currentPath == 10 && currentWaypoint == 2)
         {
@@ -591,15 +602,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for RL out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to the pool
-                arranger.currentPath = 10;
-                currentWaypoint = 1;
-                directionReversed = false;
-            }
+        //when you are heading for RL out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 10;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper right side of the house
         if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
@@ -647,15 +658,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for RL out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to the pool
-                arranger.currentPath = 11;
-                currentWaypoint = 1;
-                directionReversed = false;
-            }
+        //when you are heading for RL out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 11;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper right side of the house
         if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
@@ -703,15 +714,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for the RC out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to RL
-                arranger.currentPath = 7;
-                currentWaypoint = 0;
-                directionReversed = false;
-            }
+        //when you are heading for the RC out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RL
+            arranger.currentPath = 7;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper left side of the house
         if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
@@ -758,15 +769,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for the RR out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to RR
-                arranger.currentPath = 8;
-                currentWaypoint = 0;
-                directionReversed = false;
-            }
+        //when you are heading for the RR out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RR
+            arranger.currentPath = 8;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper left side of the house
         if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
@@ -813,15 +824,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for the kitchen out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to the kitchen
-                arranger.currentPath = 9;
-                currentWaypoint = 0;
-                directionReversed = false;
-            }
+        //when you are heading for the kitchen out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the kitchen
+            arranger.currentPath = 9;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper left side of the house
         if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
@@ -868,15 +879,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for the kitchen out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to RTR1
-                arranger.currentPath = 12;
-                currentWaypoint = 0;
-                directionReversed = false;
-            }
+        //when you are heading for the kitchen out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RTR1
+            arranger.currentPath = 12;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper left side of the house
         if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
@@ -923,15 +934,15 @@ public class pathFollower : MonoBehaviour
             directionReversed = true;
         }
 
-            //when you are heading for the kitchen out of one of these rooms and reach the corridor
-            if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
-                arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true)
-            {
-                //switch to the path leading to RTR2
-                arranger.currentPath = 13;
-                currentWaypoint = 0;
-                directionReversed = false;
-            }
+        //when you are heading for the kitchen out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RTR2
+            arranger.currentPath = 13;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
 
         //when he is at any room on the upper left side of the house
         if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
@@ -999,6 +1010,44 @@ public class pathFollower : MonoBehaviour
             arranger.currentPath = 0;
             currentWaypoint = 0;
             directionReversed = false;
+        }
+    }
+
+    private void checkWalls()
+    {
+
+        //when you are on the way to the first floor rooms on the way there
+
+        if (transform.position.y > -5 && transform.position.y < -1.55 || transform.position.y > -0.9 && transform.position.y < 0.4)
+        {
+
+            if (destination == "pool" && arranger.currentPath == 0 && directionReversed == false || destination == "pool" && arranger.currentPath == 5 && directionReversed == false && transform.position.x > -3 || destination == "pool" && arranger.currentPath == 5 && directionReversed == false && transform.position.y > -3.0 && transform.position.x < -3 ||
+                destination == "RL" && arranger.currentPath == 0 && directionReversed == false || destination == "RL" && arranger.currentPath == 6 && directionReversed == false && transform.position.x > -1.2 || destination == "RL" && arranger.currentPath == 6 && directionReversed == false && transform.position.y > -3.5 && transform.position.x < -1.2 ||
+                destination == "RR" && arranger.currentPath == 0 && directionReversed == false || destination == "RR" && arranger.currentPath == 8 && directionReversed == false && transform.position.x < 1 || destination == "RR" && arranger.currentPath == 8 && directionReversed == false && transform.position.y > -3.5 && transform.position.x > 1 ||
+                destination == "kitchen" && arranger.currentPath == 0 && directionReversed == false || destination == "kitchen" && arranger.currentPath == 9 && directionReversed == false && transform.position.x < 2 || destination == "kitchen" && arranger.currentPath == 9 && directionReversed == false && transform.position.y > -3.5 && transform.position.x > 2 ||
+                destination == "RC" && arranger.currentPath == 0 && directionReversed == false || destination == "RC" && arranger.currentPath == 7 && directionReversed == false && currentWaypoint < 1 || destination == "RC" && arranger.currentPath == 7 && directionReversed == false && transform.position.y > -3.5 && isRepairing == true)
+            {
+                hotelOwnerSprite.SetActive(false);
+            }
+            else if (transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -3.5 && destination == "RL2" || transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -3.5 && destination == "reception" ||
+                     transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -5 && destination == "RL1" || transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -5 && destination == "reception" ||
+                     transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 3.4 && destination == "RR1" || transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 3.4 && destination == "reception" ||
+                     transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 5.9 && destination == "RR2" || transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 5.9 && destination == "reception")
+            {
+                hotelOwnerSprite.SetActive(false);
+            }
+            else if (destination == "reception" || destination == "RTL1" || destination == "RTL2" || destination == "RTR1" || destination == "RTR2" || destination == "RL1" || destination == "RL2" || destination == "RR1" || destination == "RR2")
+            {
+                hotelOwnerSprite.SetActive(false);
+            }
+            else
+            {
+                hotelOwnerSprite.SetActive(true);
+            }
+        }
+        else
+        {
+            hotelOwnerSprite.SetActive(true);
         }
     }
 }

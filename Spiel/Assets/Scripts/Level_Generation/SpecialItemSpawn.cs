@@ -10,6 +10,11 @@ public class SpecialItemSpawn : MonoBehaviour {
     public float minimumSpawnTimeDifference;
     public int spawnProbility;
 
+    //referencing the prefabs
+    public GameObject screamPrefab;
+    public GameObject slimePrefab;
+    public GameObject bananaPrefab;
+
     //private variable for generating random numbers
     System.Random rnd = new System.Random();
 
@@ -51,7 +56,38 @@ public class SpecialItemSpawn : MonoBehaviour {
 
                 if (random == 1)
                 {
-                    Debug.Log("Spawn Special Item now");
+                    Debug.Log("Spawn Special");
+
+                    int prefabNumber = rnd.Next(1, 4);
+                    GameObject prefab = screamPrefab;
+
+                    switch (prefabNumber)
+                    {
+                        case 1:
+                            prefab = screamPrefab;
+                            break;
+                        case 2:
+                            prefab = slimePrefab;
+                            break;
+                        case 3:
+                            prefab = bananaPrefab;
+                            break;
+                    }
+
+                    int firstxDigit = rnd.Next(-8, 9);
+                    int secondxDigit = rnd.Next(0, 10);
+
+                    string xString = firstxDigit + "." + secondxDigit;
+                    float xpos = float.Parse(xString);
+
+                    int firstyDigit = rnd.Next(-4, 5);
+                    int secondyDigit = rnd.Next(0, 10);
+
+                    string yString = firstyDigit + "." + secondyDigit;
+                    float ypos = float.Parse(yString);
+
+                    GameObject go = (GameObject)Instantiate(prefab);
+                    go.transform.position = new Vector2(xpos, ypos);
                 }
 
                 coolingPeriod = minimumSpawnTimeDifference;

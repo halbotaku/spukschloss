@@ -31,8 +31,8 @@ public class SpecialPickUp : MonoBehaviour
     public float flipFloatMovement;
 
     //variable remembering the item currently hovered over
-    private GameObject hoverItem;
-    private Boolean isHovering;
+    private GameObject hoverItem = null;
+    private Boolean isHovering = false;
 
     private SpecialItem item;
 
@@ -466,9 +466,6 @@ public class SpecialPickUp : MonoBehaviour
             {
                 victim = "RR2";
             }
-
-            Debug.Log(victim);
-
             isScreaming = false;
             gameObject.transform.localScale = new Vector2(1, 1);
             sprite.color = new Color(1f, 1f, 1f, 1f);

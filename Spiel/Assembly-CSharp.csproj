@@ -49,7 +49,11 @@
      <Compile Include="Assets\Scripts\Camera_and_UI\CameraController.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\GlowEffekt.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\PortraitHandler.cs" />
+     <Compile Include="Assets\Scripts\Camera_and_UI\SkyScript.cs" />
+     <Compile Include="Assets\Scripts\Camera_and_UI\StarSpawn.cs" />
+     <Compile Include="Assets\Scripts\Camera_and_UI\SunMoonSpawn.cs" />
      <Compile Include="Assets\Scripts\Camera_and_UI\TowerClock.cs" />
+     <Compile Include="Assets\Scripts\Camera_and_UI\cloudSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\GuestSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\InteractionSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\ItemSpawn.cs" />
@@ -68,6 +72,7 @@
      <Compile Include="Assets\Scripts\Paths\pathArranger.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollower.cs" />
      <Compile Include="Assets\Scripts\Paths\pathFollowerGuest.cs" />
+     <Compile Include="Assets\Scripts\player\CheckOut.cs" />
      <Compile Include="Assets\Scripts\player\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\shader\SpriteOutline.cs" />
      <None Include="Assets\Scripts\shader\Sprites-Outline.shader" />

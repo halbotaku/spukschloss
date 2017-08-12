@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class pathFollowerGuest : MonoBehaviour
@@ -92,11 +93,17 @@ public class pathFollowerGuest : MonoBehaviour
     private bool dummy;
     private bool cry;
 
+    //check out controls
+    public GameObject fakeHotelOwner;
+
+    //sprite of the guest
+    private GameObject sprite;
+
     // This function is called just one time by Unity the moment the game loads
     private void Start()
     {
-
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
+        sprite = this.gameObject.transform.GetChild(2).gameObject;
         mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         //save the speed value into a variable for switching between idling and going speed
@@ -158,6 +165,9 @@ public class pathFollowerGuest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //control the effect of going through the walls
+        checkWalls();
+
         if (isSpecial == true && notReacting == true)
         {
             if (warningCountdown > 0)
@@ -417,27 +427,39 @@ public class pathFollowerGuest : MonoBehaviour
 
 
         //Handle the at-Reception-Waiting Countdown
-        if (isWaitingAtReception == true && receptionWaitingCountdown > 0)
+        if (isWaitingAtReception == true)
         {
             //only stop the play animation when you have walked before, otherweise avoid a reload
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
             {
                 myAnimator.Play("stand");
+                reactionIcon.SetActive(true);
             }
 
-            receptionWaitingCountdown -= Time.deltaTime;
-
-            if (receptionWaitingCountdown <= 0)
+            if (fakeHotelOwner.GetComponent<CheckOut>().isCheckingOut == true)
             {
-                //stop waiting and go to reception
-                stopWaitingAtReception();
+                //start the checkout duration
+                receptionWaitingCountdown = receptionWaitingCountdown - Time.deltaTime;
+
+                //when the ghost triggered the checkout
+                if (receptionWaitingCountdown < 0)
+                {
+                    //ghostly hotelOwner disappears when having checked out one guest
+                    fakeHotelOwner.GetComponent<CheckOut>().isCheckingOut = false;
+
+                    //stop waiting and go to reception
+                    stopWaitingAtReception();
+                }
             }
 
-            if (hasBeenRepairedYet(brokenObject))
+            if (fakeHotelOwner.GetComponent<CheckOut>().isCheckingOut == false && fakeHotelOwner.GetComponent<CheckOut>().hotelOwner.GetComponent<pathFollower>().destination == "reception")
             {
-                //stop waiting and go back
-                isWaitingAtReception = false;
-                isReturningToRoom = true;
+                if (hasBeenRepairedYet(brokenObject))
+                {
+                    //stop waiting and go back
+                    isWaitingAtReception = false;
+                    isReturningToRoom = true;
+                }
             }
         }
 
@@ -660,22 +682,11 @@ public class pathFollowerGuest : MonoBehaviour
         //stop waiting
         isWaitingAtReception = false;
 
-        //set patienceCounter active
-        patienceCounter.SetActive(false);
-
-        //check whether damage has been repaired yet after waiting for so long
-        if (hasBeenRepairedYet(brokenObject))
-        {
-            isReturningToRoom = true;
-        }
-        else
-        {
             //pick the way leading out of the hotel
             currentWaypoint = 0;
             arranger.currentPath = 2;
             directionReversed = false;
             goingToReception = true;
-        }
     }
 
     private void returnToRoom()
@@ -740,5 +751,30 @@ public class pathFollowerGuest : MonoBehaviour
         }
 
         return patienceCounterAnim;
+    }
+
+    private void checkWalls()
+    {
+        if (transform.position.y > -5 && transform.position.y < -1.55 || transform.position.y > -0.9 && transform.position.y < 0.4 )
+        {
+            if (room == "" || room == "RTL1" || room == "RTL2" || room == "RTR1" || room == "RTR2" || room == "pool" && arranger.currentPath == 1 || room == "RL" && arranger.currentPath == 1 ||
+                room == "RC" && arranger.currentPath == 1 || room == "RR" && arranger.currentPath == 1 || room == "kitchen" && arranger.currentPath == 1)
+            {
+                sprite.SetActive(false);
+            }
+            else
+            {
+                sprite.SetActive(true);
+            }
+        }
+        else if (room == "RL1" && transform.position.x < -3 && transform.position.x > -5 || room == "RR2" && transform.position.x > 2.9 && transform.position.x < 5.9 ||
+        room == "RL2" && transform.position.x < -3 && transform.position.x > -3.5 || room == "RR1" && transform.position.x > 2.9 && transform.position.x < 3.4)
+        {
+            sprite.SetActive(false);
+        }
+        else
+        {
+            sprite.SetActive(true);
+        }
     }
 }
