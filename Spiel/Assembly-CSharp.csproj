@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Level_Generation\ItemSpawn.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\RoomPositionInteraction.cs" />
      <Compile Include="Assets\Scripts\Level_Generation\SpecialItemSpawn.cs" />
+     <Compile Include="Assets\Scripts\Menus\ImpressumMenu.cs" />
      <Compile Include="Assets\Scripts\Menus\mainMenu.cs" />
      <Compile Include="Assets\Scripts\Menus\pauseMenu.cs" />
      <Compile Include="Assets\Scripts\Objects\InteractionList.cs" />

@@ -10,7 +10,6 @@ public class mainMenu : MonoBehaviour {
 
     public Button start;
     public Button impressum;
-    public Button optionen;
     public Button beenden;
     public Button ja;
     public Button nein;
@@ -20,7 +19,6 @@ public class mainMenu : MonoBehaviour {
         //reference the buttons
         start = start.GetComponent<Button>();
         impressum = impressum.GetComponent<Button>();
-        optionen = optionen.GetComponent<Button>();
         beenden = beenden.GetComponent<Button>();
 
         //reference the yes/no buttons for exiting the game
@@ -37,7 +35,6 @@ public class mainMenu : MonoBehaviour {
 
         start.enabled = false;
         impressum.enabled = false;
-        optionen.enabled = false;
         beenden.enabled = false;
     }
 
@@ -47,7 +44,6 @@ public class mainMenu : MonoBehaviour {
 
         start.enabled = true;
         impressum.enabled = true;
-        optionen.enabled = true;
         beenden.enabled = true;
     }
 
@@ -59,5 +55,10 @@ public class mainMenu : MonoBehaviour {
     public void startLevel()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void startImpressum()
+    {
+        SceneManager.LoadScene(2);
     }
 }

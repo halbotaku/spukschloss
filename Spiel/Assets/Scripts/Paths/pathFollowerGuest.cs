@@ -746,7 +746,7 @@ public class pathFollowerGuest : MonoBehaviour
                 patienceCounterAnim = "heavy_time_animation";
                 break;
             default:
-                patienceCounterAnim = "light_time_animation";
+                patienceCounterAnim = "hardest_time_animation";
                 break;
         }
 
