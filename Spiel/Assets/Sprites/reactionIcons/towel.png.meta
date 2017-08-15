@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 3fc0a0dc726ba6f4a9ef15dba3f3739a
-timeCreated: 1498308064
+timeCreated: 1502606944
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -75,10 +75,10 @@ TextureImporter:
       name: towel_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 4
-        width: 63
-        height: 63
+        x: 8
+        y: 8
+        width: 126
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -88,10 +88,10 @@ TextureImporter:
       name: towel_1
       rect:
         serializedVersion: 2
-        x: 74
-        y: 4
-        width: 65
-        height: 63
+        x: 148
+        y: 8
+        width: 129
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

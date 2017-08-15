@@ -8,6 +8,8 @@ public class RoomPositionInteraction : MonoBehaviour {
 
     public string[] spawnableObjects;
 
+    public GameObject myReactingGuest;
+
     public float posx;
     public float posy;
 

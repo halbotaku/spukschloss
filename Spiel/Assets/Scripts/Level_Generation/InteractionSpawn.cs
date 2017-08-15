@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class InteractionSpawn : MonoBehaviour {
 
-    //variables holding the waiting times according to damage intensity
-    public float[] roomWaitingTimes;
-    public float[] receptionWaitingTimes;
-    public float[] repairTimes;
-
     //GameObject Array holding the spawnable interaction Objects
     public GameObject[] spawnPool;
 
@@ -22,7 +17,7 @@ public class InteractionSpawn : MonoBehaviour {
     private GameObject pickedInteraction;
 
     // Use this for initialization
-    public void Start() {
+    public void Awake() {
 
         //go through all the spawn Positions
         for (int i = 0; i < spawnPositions.Length; i++)
@@ -57,6 +52,7 @@ public class InteractionSpawn : MonoBehaviour {
                 CircleCollider2D defaultCollider = pickedInteraction.GetComponent<CircleCollider2D>();
 
                 collider.radius = defaultCollider.radius;
+                collider.offset = defaultCollider.offset;
 
                 //create the modescript component and add the according properties
                 spawnPositions[i].AddComponent<ModeScript>();
@@ -65,15 +61,21 @@ public class InteractionSpawn : MonoBehaviour {
 
                 mode.pickUpMode = defaultMode.pickUpMode;
                 mode.interactionMode = defaultMode.interactionMode;
+                mode.pickUpGlow = defaultMode.pickUpGlow;
+                mode.interactionGlow = defaultMode.interactionGlow;
 
                 //create the interaction list component and add the according properties
                 spawnPositions[i].AddComponent<InteractionList>();
                 InteractionList spawnList = spawnPositions[i].GetComponent<InteractionList>();
                 InteractionList defaultList = pickedInteraction.GetComponent<InteractionList>();
 
-                spawnList.myName = defaultList.myName;
+                spawnList.position = info.myPosition;
 
-                spawnList.pickUpList = new GameObject[defaultList.pickUpList.Length];
+                spawnList.myName = defaultList.myName;
+                spawnList.hotelOwner = defaultList.hotelOwner;
+                spawnList.reactingGuest = info.myReactingGuest;
+
+                spawnList.pickUpList = new string[defaultList.pickUpList.Length];
                 spawnList.animationList = new string[defaultList.pickUpList.Length];
                 spawnList.gradeOfDamage = new string[defaultList.pickUpList.Length];
                 spawnList.inRoomWaitingList = new float[defaultList.pickUpList.Length];
@@ -126,24 +128,32 @@ public class InteractionSpawn : MonoBehaviour {
 
                 anim.runtimeAnimatorController = defaultAnim.runtimeAnimatorController as RuntimeAnimatorController;
 
-                //create the SpriteOutline and add properties
-                sprite.AddComponent<SpriteOutline>();
-                SpriteOutline outline = sprite.GetComponent<SpriteOutline>();
-                SpriteOutline defaultOutline = defaultSprite.GetComponent<SpriteOutline>();
+                //create the Glow & add it as a child to the pickUp
+                GameObject glow = new GameObject();
+                glow.transform.parent = spawnPositions[i].transform;
 
-                outline.enabled = defaultOutline.enabled;
-                outline.color = defaultOutline.color;
-                outline.outlineSize = defaultOutline.outlineSize;
+                //Create Spriterenderer and add properties
+                glow.AddComponent<SpriteRenderer>();
+                GameObject defaultGlow = pickedInteraction.transform.GetChild(1).gameObject;
+
+                SpriteRenderer glowRenderer = glow.GetComponent<SpriteRenderer>();
+                SpriteRenderer defaultGlowRenderer = defaultGlow.GetComponent<SpriteRenderer>();
+
+                glowRenderer.sprite = defaultGlowRenderer.sprite;
+                glowRenderer.material = defaultGlowRenderer.material;
+                glowRenderer.sortingLayerID = defaultGlowRenderer.sortingLayerID;
+                glowRenderer.sortingLayerName = defaultGlowRenderer.sortingLayerName;
+                glowRenderer.sortingOrder = defaultGlowRenderer.sortingOrder;
+                glow.transform.localPosition = defaultGlow.transform.localPosition;
+                glow.transform.localScale = defaultGlow.transform.localScale;
+
+                //create the glowScript and add properties
+                glow.AddComponent<GlowEffekt>();
+                GlowEffekt glowing = glow.GetComponent<GlowEffekt>();
 
                 //reset the item's position
                 spawnPositions[i].transform.position = new Vector3(info.posx, info.posy);
             }
         }
 	}
-
-
-    void Update()
-    {
-        Debug.Log(pickedInteraction);
-    }
 }

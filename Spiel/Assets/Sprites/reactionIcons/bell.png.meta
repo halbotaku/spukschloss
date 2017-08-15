@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 6b844209fbf9cdb4789f94960038c2c2
-timeCreated: 1498307943
+timeCreated: 1502606843
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -75,10 +75,10 @@ TextureImporter:
       name: bell_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 4
-        width: 63
-        height: 63
+        x: 8
+        y: 8
+        width: 126
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -88,12 +88,12 @@ TextureImporter:
       name: bell_1
       rect:
         serializedVersion: 2
-        x: 74
-        y: 4
-        width: 65
-        height: 63
+        x: 148
+        y: 8
+        width: 129
+        height: 128
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

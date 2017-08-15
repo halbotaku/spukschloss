@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 63b6fc760a5e2a84590662b72b92a946
-timeCreated: 1498307913
+timeCreated: 1502606831
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -75,10 +75,10 @@ TextureImporter:
       name: bag_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 4
-        width: 63
-        height: 63
+        x: 8
+        y: 8
+        width: 126
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -88,10 +88,10 @@ TextureImporter:
       name: bag_1
       rect:
         serializedVersion: 2
-        x: 74
-        y: 4
-        width: 65
-        height: 63
+        x: 148
+        y: 8
+        width: 129
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

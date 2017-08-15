@@ -10,9 +10,17 @@ public class ObjectInteraction : MonoBehaviour {
     //create GameObject for the current interaction object
     private GameObject currentInteraction = null;
 
-	// Use this for initialization
-	void Start () {
+    //reference the Player AudioSource
+    private AudioSource audio;
+    private PlayerSound audioManager;
+
+        // Use this for initialization
+        void Start () {
         pickUp = GetComponent<ObjectPickUp>();
+
+        //reference the sound controller
+        audio = this.gameObject.GetComponent<AudioSource>();
+        audioManager = this.gameObject.GetComponent<PlayerSound>();
     }
 	
 	// Update is called once per frame
@@ -21,7 +29,12 @@ public class ObjectInteraction : MonoBehaviour {
         if (currentInteraction!=null && Input.GetButtonDown("pickUp"))
         {
             //trigger the interaction
+            audio.clip = audioManager.combine;
+            audio.loop = false;
+            audio.Play();
             currentInteraction.GetComponent<InteractionList>().combine(pickUp.followPlayer);
+
+            //delete the used pick up item
             Destroy(pickUp.followPlayer);
         }
 		

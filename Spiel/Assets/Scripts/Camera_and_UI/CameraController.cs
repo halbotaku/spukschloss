@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class CameraController : MonoBehaviour {
 
@@ -27,12 +28,12 @@ void start()
         float width = height * cam.aspect;
 
         //check the distances of background borders to camera borders
-        double distanceTop = 5.3961 - player.transform.position.y - 0.51*height;
-        double distanceBottom = player.transform.position.y - 0.51*height + 5.3961;
-        double distanceRight = 9.5961 - player.transform.position.x - 0.51*width;
-        double distanceLeft = player.transform.position.x - 0.51 * width + 9.5961;
+        double distanceTop = 19.52 - (player.transform.position.y + 1.77*height);
+        double distanceBottom = -19.52 + (player.transform.position.y + 2.125*height);
+        double distanceRight = 32.9 - (player.transform.position.x + 1.64 * width);
+        double distanceLeft = -32.9 + (player.transform.position.x + 1.98 * width);
 
-        //when the border of the camera does not cross the background picture's border & movement is upwards
+        //when the border of the camera crosses the background picture's border & movement is upwards/downwards
         if (distanceTop >= 0 && posy < player.transform.position.y || distanceBottom >=0 && posy > player.transform.position.y)
         {
             //position Camera according to player movement

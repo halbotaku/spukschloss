@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class pathFollower : MonoBehaviour {
+public class pathFollower : MonoBehaviour
+{
 
     //Create variable for remembering the current waypoint
-    public int currentWaypoint = 0;
+    public int currentWaypoint = 2;
 
     //Create Arranger holding the paths (pathArranger.cs)
     public pathArranger arranger;
@@ -18,9 +19,6 @@ public class pathFollower : MonoBehaviour {
     //Movementspeed
     public float speed;
 
-    //Create boolean for start/stop of Movement
-    public bool go = true;
-
     // variable to hold a reference to our SpriteRenderer component (Flipping the Sprite)
     private SpriteRenderer mySpriteRenderer;
 
@@ -30,64 +28,140 @@ public class pathFollower : MonoBehaviour {
     //Array for saving the rooms & items in need of repair
     private string[] repairObjectList;
     private string[] roomList;
- 
-    
-    // This function is called just one time by Unity the moment the game loads
+
+    //Animator for Controlling the hotelowner animations
+    private Animator myAnimator;
+
+    //RepairScript reference
+    private RepairScript repairScript;
+
+    //referencing the repairLists
+    public List<string> roomRepairList;
+    public List<string> objectRepairList;
+
+    //bool handling repair
+    public bool isRepairing;
+
+    //bool handling the slip on the magic banana
+    public bool isSlipping;
+
+    //sprite of the hotel owner character
+    private GameObject hotelOwnerSprite;
+    private bool isWaiting;
+
+    //variables remembering if figure has moved
+    private float tempXmove;
+    private float tempYmove;
+
+
     private void Awake()
     {
+        tempXmove = transform.position.x;
+        tempYmove = transform.position.y;
+
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
         mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        // get a reference to the Animator for controlling the states of the animation
+        myAnimator = GetComponentInChildren<Animator>();
+
+        //set the current way to the one at the reception
+        arranger.currentPath = 14;
+        directionReversed = false;
+        isRepairing = false;
+        isWaiting = true;
+
+        //reference the repairScript
+        repairScript = GetComponent<RepairScript>();
+
+        //reference the repairLists
+        roomRepairList = repairScript.roomRepairList;
+        objectRepairList = repairScript.objectRepairList;
+
+        isSlipping = false;
+
+        //reference the hotelownersprite
+        hotelOwnerSprite = this.gameObject.transform.GetChild(0).gameObject;
     }
-	
-	
-    
+
+
+
     // Update is called once per frame
-	void Update () {
+    void Update()
+    {   //control the optical disappearance when going through walls
+        checkWalls();
+
+        //when there are no objects to repair
+        if (objectRepairList.Count == 0)
+        {
+            //head for the reception
+            destination = "reception";
+        }
+        else
+        {
+            //pick the first object out of the list and make it your destination
+            destination = roomRepairList[0];
+        }
 
         //Check the distance of the object to the next waypoint
         float dist = Vector3.Distance(gameObject.transform.position, arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position);
 
-        //Check if Object is set to Movement
-        if (go)
+        if (dist <= minDist)
         {
-            //check your destination
+            //Move the Object to next waypoint
             getPath();
+        }
 
-            //Check if minimum Distance is achieved, if so switch to next waypoint
-            if (dist > minDist)
+        //Check if minimum Distance is achieved, if so go to next waypoint
+        if (dist > minDist)
+        {
+            //Move the Object to next waypoint
+            Move();
+        }
+        else
+        {
+            if (directionReversed == false)
             {
-                //Move the Object to next waypoint
-                Move();
-            }
-            else
-            {           if (directionReversed == false)
-                        {
-
-                            if (currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
-                            {
-                                //TO DO
-                            }
-                            else
-                            {
-                                //increase the counting value to move to the next waypoint
-                                currentWaypoint++;
-                            }
-                        }
-                        else
-                        {
-                                if (currentWaypoint < arranger.paths[arranger.currentPath].transform.childCount &&
-                                    currentWaypoint > 0)
-                                {
-                                    //decrease the counting value to move to the previous waypoint (backwards)
-                                    currentWaypoint--;
-                                }
-                                else
-                                {
-                                    //TO DO
-                                }
+                //When hotelowner has not reached the end of the path yet
+                if (currentWaypoint + 1 != arranger.paths[arranger.currentPath].transform.childCount)
+                {
+                    //if the hotelowner is not slipping right now
+                    if (isSlipping == false)
+                    {
+                        //increase the counting value to move to the next waypoint
+                        currentWaypoint++;
+                    }
                 }
-               }
-         }
+            }
+            //When direction is set to be reversed
+            else
+            {
+                //When hotelowner has reached the end of path (beginning waypoint)
+                if (currentWaypoint != 0)
+                {
+                    if (isSlipping == false)
+                    {
+                        //decrease the counting value to move to the previous waypoint
+                        currentWaypoint--;
+                    }
+                }
+            }
+        }
+
+        if (tempXmove != gameObject.transform.position.x && tempYmove != gameObject.transform.position.y || tempXmove != gameObject.transform.position.x || tempYmove != gameObject.transform.position.y)
+        {
+            myAnimator.Play("walk");
+        }
+        else
+        {
+            if (isWaiting)
+            {
+                myAnimator.Play("stand");
+            }
+        }
+
+        tempXmove = transform.position.x;
+        tempYmove = transform.position.y;
     }
 
 
@@ -128,294 +202,879 @@ public class pathFollower : MonoBehaviour {
         {
             //when he is to head for the left room 1 first floor
             case "RL1":
-
-                //function for checking whether player is at ground floor center already, if so choose the path leading to the room
-                receptionCheckFirst(1);
-
-                //function for checking if player is at center, then move to ground floor center
-                centerCheckFirst();
-
-                //function for calling upper floor room positions to center first
-                upperFloorToCenterFirst();
-
-                //function for calling first floor room positions to ground floor center first, except for current destination
-                firstFloorToReceptionFirst(1, 1);
+                checkRL1Path();
                 break;
 
             //when he is to head for the left room 2 first floor
             case "RL2":
-
-                receptionCheckFirst(2);
-
-                centerCheckFirst();
-
-                upperFloorToCenterFirst();
-
-                firstFloorToReceptionFirst(2, 1);
+                checkRL2Path();
                 break;
-
 
             //when he is to head for the right room 1 first floor
             case "RR1":
-
-                receptionCheckFirst(3);
-
-                centerCheckFirst();
-
-                upperFloorToCenterFirst();
-
-                firstFloorToReceptionFirst(3, 1);
+                checkRR1Path();
                 break;
-
 
             //when he is to head for the right room 2 first floor
             case "RR2":
-
-                receptionCheckFirst(4);
-
-                centerCheckFirst();
-
-                upperFloorToCenterFirst();
-
-                firstFloorToReceptionFirst(4, 1);
+                checkRR2Path();
                 break;
-
 
             //when he is to head for the reception
             case "reception":
-
-                receptionCheckFirst(14);
-
-                centerCheckFirst();
-
-                upperFloorToCenterFirst();
-
-                firstFloorToReceptionFirst(14, 1);
+                checkReceptionPath();
                 break;
-
 
             //when he is to head for the pool
             case "pool":
-
-                //function to check if figure is already at center upper floors, if so move to the destinaton
-                upperCenterCheckFirst(5);
-
-                //function to check if figure is at first floor center, if so move to the upper floor center
-                lowerCenterCheckFirst();
-
-                //function to check if figure is at any first floor position apart from the center, if so move to the center
-                lowerFloorToCenterFirst();
-
-                //function to check if figure is at any second, third or corridor position apart from the upper floor center, if so move to the center
-                upperFloorsToCenterFirst(5, 2);
+                checkPoolPath();
                 break;
-
 
             //when he is to head for the left room second floor
             case "RL":
-
-                upperCenterCheckFirst(6);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(6, 2);
+                checkRLPath();
                 break;
-
 
             //when he is to head for the center room second floor
             case "RC":
-
-                upperCenterCheckFirst(7);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(7, 1);
+                checkRCPath();
                 break;
-
 
             //when he is to head for the left room second floor
             case "RR":
-
-                upperCenterCheckFirst(8);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(8, 2);
+                checkRRPath();
                 break;
-
 
             //when he is to head for the left room second floor
             case "kitchen":
-
-                upperCenterCheckFirst(9);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(9, 2);
+                checkKitchenPath();
                 break;
-
 
             //when he is to head for the left room 1 third floor
             case "RTL1":
-
-                upperCenterCheckFirst(10);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(10, 2);
+                checkRTL1Path();
                 break;
 
             //when he is to head for the left room 2 third floor
             case "RTL2":
-
-                upperCenterCheckFirst(11);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(11, 2);
+                checkRTL2Path();
                 break;
 
 
             //when he is to head for the right room 1 third floor
             case "RTR1":
-
-                upperCenterCheckFirst(12);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(12, 2);
+                checkRTR1Path();
                 break;
 
 
             //when he is to head for the right room 2 third floor
             case "RTR2":
-
-                upperCenterCheckFirst(13);
-
-                lowerCenterCheckFirst();
-
-                lowerFloorToCenterFirst();
-
-                upperFloorsToCenterFirst(13, 2);
+                checkRTR2Path();
                 break;
 
 
             default:
-                destination = "";
+                destination = "reception";
                 break;
         }
+
+        tempYmove = this.transform.position.y;
+        tempXmove = this.transform.position.x;
     }
 
-    public void receptionCheckFirst(int newPath)
+    private void checkReceptionPath()
     {
-        //if his position is the reception
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position == arranger.paths[0].transform.GetChild(0).position)
+
+        //when he is at the reception already then he has got nothing to do besides awaiting guests
+        if (arranger.currentPath == 14 && currentWaypoint == 2)
         {
-            //Switch to the path leading to the Room
-            arranger.currentPath = newPath;
             directionReversed = false;
 
+            isWaiting = true;
         }
-    }
-
-    public void centerCheckFirst()
-    {
-        //if position is the upper floor center
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position == arranger.paths[0].transform.GetChild(1).position)
+        else
         {
-            //go to the first floor center first
-            currentWaypoint = 1;
-            arranger.currentPath = 0;
+            isWaiting = false;
+        }
+
+        //when he is at a room on the ground floor except for the reception
+        if (arranger.currentPath == 1 && currentWaypoint == 1 || arranger.currentPath == 2 && currentWaypoint == 1 || arranger.currentPath == 3 && currentWaypoint == 1 || arranger.currentPath == 4 && currentWaypoint == 1)
+        {
+            //just reverse the direction of the path leading to the waypoint
             directionReversed = true;
         }
-    }
 
-    public void upperFloorToCenterFirst()
-    {
-        //if the current position on second, third floor or the corridor but not the center of the house
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position.y > arranger.paths[0].transform.GetChild(0).position.y + 1 &&
-            arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position != arranger.paths[0].transform.GetChild(1).position)
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
         {
-            //go to the center first
-            directionReversed = true;
-        }
-    }
-
-    //variables mark the current destination point
-    public void firstFloorToReceptionFirst(int pathNumber, int waypointNumber)
-    {
-        //if the current position on first floor but not the destination or first floor center
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position.y < arranger.paths[0].transform.GetChild(1).position.y &&
-            arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position != arranger.paths[0].transform.GetChild(0).position &&
-            arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position != arranger.paths[pathNumber].transform.GetChild(waypointNumber).position)
-        {
-            //go to the reception first
-            directionReversed = true;
-        }
-    }
-
-
-    public void upperCenterCheckFirst(int newPath)
-    {
-        //if position is the upper floor center
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position == arranger.paths[0].transform.GetChild(1).position)
-        {
-            //Switch to the path leading to the Room
-            arranger.currentPath = newPath;
+            //go back to the waypoint at the reception first
+            arranger.currentPath = 14;
             currentWaypoint = 0;
             directionReversed = false;
-
         }
+
+        //when positioned at one of the upper floors go to the reception waypoint first
+        checkUpperFloorPaths();
+
     }
 
-
-    public void lowerCenterCheckFirst()
+    private void checkRL1Path()
     {
-        //if position is the lower floor center
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position == arranger.paths[0].transform.GetChild(0).position)
+        //when he is at RL1 already
+        if (arranger.currentPath == 1 && currentWaypoint == 1 && transform.position. x == tempXmove && transform.position.y == tempYmove)
         {
-            //go to the upper center first
-            arranger.currentPath = 0;
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at the room next door
+        if (arranger.currentPath == 2 && currentWaypoint == 1)
+        {
+            //go to RL1 right away
+            arranger.currentPath = 1;
+            directionReversed = false;
+        }
+
+        //when he is at any other room of the ground floor
+        if (arranger.currentPath == 14 && currentWaypoint == 2 || arranger.currentPath == 3 && currentWaypoint == 1 || arranger.currentPath == 4 && currentWaypoint == 1)
+        {
+            //go to back the waypoint first
+            directionReversed = true;
+        }
+
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
+        {
+            //go to RL1
+            arranger.currentPath = 1;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when positioned at one of the upper floors go to the reception waypoint first
+        checkUpperFloorPaths();
+    }
+
+    private void checkRL2Path()
+    {
+        //when he is at RL1 already
+        if (arranger.currentPath == 2 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at the room next door
+        if (arranger.currentPath == 1 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            //go to RL1 right away
+            arranger.currentPath = 2;
+            directionReversed = false;
+        }
+
+        //when he is at any other room of the ground floor
+        if (arranger.currentPath == 14 && currentWaypoint == 2 || arranger.currentPath == 3 && currentWaypoint == 1 || arranger.currentPath == 4 && currentWaypoint == 1)
+        {
+            //go to back the waypoint first
+            directionReversed = true;
+        }
+
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
+        {
+            //go to RL2
+            arranger.currentPath = 2;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when positioned at one of the upper floors go to the reception waypoint first
+        checkUpperFloorPaths();
+    }
+
+    private void checkRR1Path()
+    {
+        //when he is at RR1 already
+        if (arranger.currentPath == 3 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at the room next door
+        if (arranger.currentPath == 4 && currentWaypoint == 1)
+        {
+            //go to RL1 right away
+            arranger.currentPath = 3;
+            directionReversed = false;
+        }
+
+        //when he is at any other room of the ground floor
+        if (arranger.currentPath == 14 && currentWaypoint == 2 || arranger.currentPath == 1 && currentWaypoint == 1 || arranger.currentPath == 2 && currentWaypoint == 1)
+        {
+            //go to back the waypoint first
+            directionReversed = true;
+        }
+
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
+        {
+            //go to RR1
+            arranger.currentPath = 3;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when positioned at one of the upper floors go to the reception waypoint first
+        checkUpperFloorPaths();
+    }
+
+    private void checkRR2Path()
+    {
+        //when he is at RR1 already
+        if (arranger.currentPath == 4 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at the room next door
+        if (arranger.currentPath == 3 && currentWaypoint == 1)
+        {
+            //go to RL1 right away
+            arranger.currentPath = 4;
+            directionReversed = false;
+        }
+
+        //when he is at any other room of the ground floor
+        if (arranger.currentPath == 14 && currentWaypoint == 2 || arranger.currentPath == 1 && currentWaypoint == 1 || arranger.currentPath == 2 && currentWaypoint == 1)
+        {
+            //go to back the waypoint first
+            directionReversed = true;
+        }
+
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
+        {
+            //go to RR1
+            arranger.currentPath = 4;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when positioned at one of the upper floors go to the reception waypoint first
+        checkUpperFloorPaths();
+    }
+
+    private void checkPoolPath()
+    {
+        //when he is at the pool already
+        if (arranger.currentPath == 5 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper left side of the house
+        if (arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for the pool out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 5;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
+            arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to the pool
+            arranger.currentPath = 5;
+            currentWaypoint = 0;
             directionReversed = false;
         }
     }
 
-    public void lowerFloorToCenterFirst()
+    private void checkRLPath()
     {
-        //if the current position on first floor but not the center
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position.y < arranger.paths[5].transform.GetChild(2).position.y &&
-            arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position != arranger.paths[0].transform.GetChild(0).position)
+        //when he is at RL already
+        if (arranger.currentPath == 6 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
-            //go to the center of the first floor first
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for RL out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 6;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
+            arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to the pool
+            arranger.currentPath = 6;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkRTL1Path()
+    {
+        //when he is at the RTL1 already
+        if (arranger.currentPath == 10 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for RL out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 11 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 10;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
+            arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to the pool
+            arranger.currentPath = 10;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkRTL2Path()
+    {
+        //when he is at the RTL2 already
+        if (arranger.currentPath == 11 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for RL out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 6 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 10 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the pool
+            arranger.currentPath = 11;
+            currentWaypoint = 1;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 ||
+            arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to the pool
+            arranger.currentPath = 11;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkRCPath()
+    {
+        //when he is at RC already
+        if (arranger.currentPath == 7 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper right side of the house
+        if (arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 || arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for the RC out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RL
+            arranger.currentPath = 7;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to RL
+            arranger.currentPath = 7;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkRRPath()
+    {
+        //when he is at RR already
+        if (arranger.currentPath == 8 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 9 && currentWaypoint == 2 || arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for the RR out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RR
+            arranger.currentPath = 8;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to RR
+            arranger.currentPath = 8;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkKitchenPath()
+    {
+        //when he is at the kitchen already
+        if (arranger.currentPath == 9 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 12 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for the kitchen out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to the kitchen
+            arranger.currentPath = 9;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to RR
+            arranger.currentPath = 9;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkRTR1Path()
+    {
+        //when he is at RTR1 already
+        if (arranger.currentPath == 12 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 || arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for the kitchen out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 13 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RTR1
+            arranger.currentPath = 12;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to RTR1
+            arranger.currentPath = 12;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkRTR2Path()
+    {
+        //when he is at RTR2 already
+        if (arranger.currentPath == 13 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            directionReversed = false;
+
+            //start repairing, avoid reloading
+            if (isRepairing == false)
+            {
+                repairScript.repair();
+                isRepairing = true;
+            }
+        }
+
+        //when he is at any other room on the upper right side of the house
+        if (arranger.currentPath == 7 && currentWaypoint == 1 || arranger.currentPath == 8 && currentWaypoint == 2 || arranger.currentPath == 9 && currentWaypoint == 2 || arranger.currentPath == 12 && currentWaypoint == 2)
+        {
+            //go one step back
+            directionReversed = true;
+        }
+
+        //when you are heading for the kitchen out of one of these rooms and reach the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 8 && currentWaypoint == 0 && directionReversed == true ||
+            arranger.currentPath == 9 && currentWaypoint == 0 && directionReversed == true || arranger.currentPath == 12 && currentWaypoint == 0 && directionReversed == true)
+        {
+            //switch to the path leading to RTR2
+            arranger.currentPath = 13;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+
+        //when he is at any room on the upper left side of the house
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2)
+        {
+            //go back to the center of the upper floor
+            directionReversed = true;
+        }
+
+        //when positioned at the ground floor go to the upper floor center first
+        checkGroundFloorPaths();
+
+        //when he is at the center of the corridor
+        if (arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 || arranger.currentPath == 9 && currentWaypoint == 0 ||
+            arranger.currentPath == 12 && currentWaypoint == 0 || arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1 ||
+            arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 ||
+            arranger.currentPath == 5 && currentWaypoint == 0)
+        {
+            //go to RTR1
+            arranger.currentPath = 13;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+
+
+    private void checkUpperFloorPaths()
+    {
+        //when he is at a room on the first or second upper floor
+        if (arranger.currentPath == 5 && currentWaypoint == 2 || arranger.currentPath == 6 && currentWaypoint == 2 || arranger.currentPath == 7 && currentWaypoint == 2 || arranger.currentPath == 8 && currentWaypoint == 2 ||
+            arranger.currentPath == 9 && currentWaypoint == 2 || arranger.currentPath == 10 && currentWaypoint == 2 || arranger.currentPath == 11 && currentWaypoint == 2 || arranger.currentPath == 12 && currentWaypoint == 2 ||
+            arranger.currentPath == 13 && currentWaypoint == 2)
+        {
+            //go back to the center of the corridor first
+            directionReversed = true;
+        }
+
+        //when he ist at the center of the corridor
+        if (arranger.currentPath == 5 && currentWaypoint == 0 || arranger.currentPath == 6 && currentWaypoint == 0 || arranger.currentPath == 7 && currentWaypoint == 0 || arranger.currentPath == 8 && currentWaypoint == 0 ||
+            arranger.currentPath == 9 && currentWaypoint == 0 || arranger.currentPath == 10 && currentWaypoint == 0 || arranger.currentPath == 11 && currentWaypoint == 0 || arranger.currentPath == 12 && currentWaypoint == 0 ||
+            arranger.currentPath == 13 && currentWaypoint == 0 || arranger.currentPath == 0 && currentWaypoint == 1)
+        {
+            //go back to the waypoint at the reception first
+            arranger.currentPath = 0;
+            currentWaypoint = 1;
             directionReversed = true;
         }
     }
 
-    //variables mark the current destination point
-    public void upperFloorsToCenterFirst(int pathNumber, int waypointNumber)
+    private void checkGroundFloorPaths()
     {
-        //if the current position on second, third floor or corridor but not the upper center & destination has not been reached yet
-        if (arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position.y > arranger.paths[0].transform.GetChild(0).position.y &&
-            arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position != arranger.paths[0].transform.GetChild(1).position &&
-            arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position != arranger.paths[pathNumber].transform.GetChild(waypointNumber).position &&
-            currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount)
+        //when he is at any room of the ground floor
+        if (arranger.currentPath == 1 && currentWaypoint == 1 || arranger.currentPath == 2 && currentWaypoint == 1 || arranger.currentPath == 3 && currentWaypoint == 1 ||
+            arranger.currentPath == 4 && currentWaypoint == 1 || arranger.currentPath == 14 && currentWaypoint == 2)
         {
-            //go to the center of the upper floors first
+            //go back to the reception waypoint
             directionReversed = true;
+        }
+
+        //when he is at the ground floor center waypoint
+        if (arranger.currentPath == 1 && currentWaypoint == 0 || arranger.currentPath == 2 && currentWaypoint == 0 || arranger.currentPath == 3 && currentWaypoint == 0 || arranger.currentPath == 4 && currentWaypoint == 0
+            || arranger.currentPath == 0 && currentWaypoint == 0 || arranger.currentPath == 14 && currentWaypoint == 0)
+        {
+            //go to the center of the upper floor corridor
+            arranger.currentPath = 0;
+            currentWaypoint = 0;
+            directionReversed = false;
+        }
+    }
+
+    private void checkWalls()
+    {
+
+        //when you are on the way to the first floor rooms on the way there
+
+        if (transform.position.y > -5 && transform.position.y < -1.55 || transform.position.y > -0.9 && transform.position.y < 0.4)
+        {
+
+            if (destination == "pool" && arranger.currentPath == 0 && directionReversed == false || destination == "pool" && arranger.currentPath == 5 && directionReversed == false && transform.position.x > -3 || destination == "pool" && arranger.currentPath == 5 && directionReversed == false && transform.position.y > -3.0 && transform.position.x < -3 ||
+                destination == "RL" && arranger.currentPath == 0 && directionReversed == false || destination == "RL" && arranger.currentPath == 6 && directionReversed == false && transform.position.x > -1.2 || destination == "RL" && arranger.currentPath == 6 && directionReversed == false && transform.position.y > -3.5 && transform.position.x < -1.2 ||
+                destination == "RR" && arranger.currentPath == 0 && directionReversed == false || destination == "RR" && arranger.currentPath == 8 && directionReversed == false && transform.position.x < 1 || destination == "RR" && arranger.currentPath == 8 && directionReversed == false && transform.position.y > -3.5 && transform.position.x > 1 ||
+                destination == "kitchen" && arranger.currentPath == 0 && directionReversed == false || destination == "kitchen" && arranger.currentPath == 9 && directionReversed == false && transform.position.x < 2 || destination == "kitchen" && arranger.currentPath == 9 && directionReversed == false && transform.position.y > -3.5 && transform.position.x > 2 ||
+                destination == "RC" && arranger.currentPath == 0 && directionReversed == false || destination == "RC" && arranger.currentPath == 7 && directionReversed == false && currentWaypoint < 1 || destination == "RC" && arranger.currentPath == 7 && directionReversed == false && transform.position.y > -3.5 && isRepairing == true)
+            {
+                hotelOwnerSprite.SetActive(false);
+            }
+            else if (transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -3.5 && destination == "RL2" || transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -3.5 && destination == "reception" ||
+                     transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -5 && destination == "RL1" || transform.position.y < -1.55 && transform.position.x < -3 && transform.position.x > -5 && destination == "reception" ||
+                     transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 3.4 && destination == "RR1" || transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 3.4 && destination == "reception" ||
+                     transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 5.9 && destination == "RR2" || transform.position.y < -1.55 && transform.position.x > 2.9 && transform.position.x < 5.9 && destination == "reception")
+            {
+                hotelOwnerSprite.SetActive(false);
+            }
+            else if (destination == "reception" || destination == "RTL1" || destination == "RTL2" || destination == "RTR1" || destination == "RTR2" || destination == "RL1" || destination == "RL2" || destination == "RR1" || destination == "RR2")
+            {
+                hotelOwnerSprite.SetActive(false);
+            }
+            else
+            {
+                hotelOwnerSprite.SetActive(true);
+            }
+        }
+        else
+        {
+            hotelOwnerSprite.SetActive(true);
         }
     }
 }
