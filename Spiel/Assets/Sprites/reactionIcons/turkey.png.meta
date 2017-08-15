@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 925ca2b504c9d114d9e3c88eb8c7b4dc
-timeCreated: 1498308071
+timeCreated: 1502606954
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -75,12 +75,12 @@ TextureImporter:
       name: turkey_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 4
-        width: 63
-        height: 63
+        x: 8
+        y: 8
+        width: 126
+        height: 128
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -88,10 +88,10 @@ TextureImporter:
       name: turkey_1
       rect:
         serializedVersion: 2
-        x: 74
-        y: 4
-        width: 65
-        height: 63
+        x: 148
+        y: 8
+        width: 129
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

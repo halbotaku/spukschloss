@@ -66,6 +66,9 @@ public class SpecialPickUp : MonoBehaviour
     private int number = 0;
     public string victim;
 
+    //reference the Player AudioSource
+    private AudioSource audio;
+    private PlayerSound audioManager;
 
     // Use this for initialization
     void Start()
@@ -108,7 +111,11 @@ public class SpecialPickUp : MonoBehaviour
 
         //reference the hotelowner
         hotelOwner = GameObject.FindGameObjectWithTag("hotelOwner").GetComponent<pathFollower>();
-       
+
+        //reference the sound controller
+        audio = this.gameObject.GetComponent<AudioSource>();
+        audioManager = this.gameObject.GetComponent<PlayerSound>();
+
     }
 
     // Update is called once per frame
@@ -144,6 +151,10 @@ public class SpecialPickUp : MonoBehaviour
 
         if (isSliming == true)
         {
+            audio.clip = audioManager.slime;
+            audio.loop = false;
+            audio.Play();
+
             slime();
         }
 
@@ -309,6 +320,12 @@ public class SpecialPickUp : MonoBehaviour
 
         if (bananaCount > 0)
         {
+            if (audio.clip != audioManager.banana)
+            {
+                audio.clip = audioManager.banana;
+                audio.loop = false;
+                audio.Play();
+            }
             bananaCount = bananaCount - Time.deltaTime;
         }
 
@@ -316,6 +333,7 @@ public class SpecialPickUp : MonoBehaviour
         {
             hotelOwner.isSlipping = false;
             isBananaing = false;
+            sprite.color = new Color(1f, 1f, 1f, 1f);
         }
     }
 
@@ -469,6 +487,13 @@ public class SpecialPickUp : MonoBehaviour
             isScreaming = false;
             gameObject.transform.localScale = new Vector2(1, 1);
             sprite.color = new Color(1f, 1f, 1f, 1f);
+
+            //scream
+            audio.clip = audioManager.scream;
+            audio.loop = false;
+            audio.Play();
+
+            temp = floatingItem.GetComponent<SpecialItem>().timeUntilScreamExplodes;
         }
     }
 }

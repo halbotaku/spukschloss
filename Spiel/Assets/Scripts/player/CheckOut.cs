@@ -18,6 +18,8 @@ public class CheckOut : MonoBehaviour
     public GameObject player;
     public GameObject hotelOwner;
 
+    private float checkOutCounter = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -33,6 +35,10 @@ public class CheckOut : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (checkOutCounter > 0)
+        {
+            checkOutCounter = checkOutCounter - Time.deltaTime;
+        }
 
         //when the ghost hovers over the area TO DO: while the hotelowner is gone
         if (isHovering && hotelOwner.transform.position.x < -3.158993 || isHovering && hotelOwner.transform.position.x > 3.218313 ||
@@ -44,7 +50,13 @@ public class CheckOut : MonoBehaviour
             if (Input.GetButtonDown("pickUp"))
             {
                 isCheckingOut = true;
+                checkOutCounter = 5;
             }
+        }
+
+        if (checkOutCounter <= 0)
+        {
+            isCheckingOut = false;
         }
 
         if (!isHovering && !isCheckingOut)

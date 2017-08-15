@@ -21,9 +21,15 @@ public class TowerClock : MonoBehaviour {
     public int guestCounter;
     private float rotationSpeed;
 
+    public bool timeOut; 
+
+    private bool end = true;
+
     public void Awake()
     {
         counter = levelLength * 60;
+
+        timeOut = false;
     }
 
     public void Update()
@@ -37,17 +43,41 @@ public class TowerClock : MonoBehaviour {
         //rotate the Big Hand with 12 times the speed
         bigHand.transform.Rotate(0, 0, -rotationSpeed * 12 * Time.deltaTime);
 
+        if (counter < 1)
+        {
+            timeOut = true;
+        }
         if (counter > 0)
         {
             //decrease the counter
             counter -= Time.deltaTime;
         }
-        else
+        
+        if (counter < 0 || guestCounter >= 13)
         {
-            Text text = txt.GetComponent<Text>();
-            text.text = "Time Out! Anzahl der verjagten Gäste: " + guestCounter;
-            timeOutWindow.SetActive(true);
-            Time.timeScale = 0;
+            if (end)
+            {
+                if (guestCounter >= 13)
+                {
+                    timeOut = true;
+                }
+
+                end = false;
+                Text text = txt.GetComponent<Text>();
+                text.text += guestCounter + " von 13 Gästen haben das Hotel verlassen. ";
+                if (guestCounter < 13)
+                {
+                    text.text += "Das wird nicht reichen, um die Menschen ein für alle Mal zu vertreiben!";
+                }
+
+                if (guestCounter == 13)
+                {
+                    text.text += "Gut gemacht! Das wird den Menschen eine Lehre sein!";
+                }
+
+                timeOutWindow.SetActive(true);
+                Time.timeScale = 0;
+            }
         }
     }
 }

@@ -1,0 +1,67 @@
+Mono path[0] = 'C:/Users/Mandy/Documents/GitHub/spukschloss/Spukschloss_Data/Managed'
+Mono path[1] = 'C:/Users/Mandy/Documents/GitHub/spukschloss/Spukschloss_Data/Mono'
+Mono config path = 'C:/Users/Mandy/Documents/GitHub/spukschloss/Spukschloss_Data/Mono/etc'
+PlayerConnection initialized from C:/Users/Mandy/Documents/GitHub/spukschloss/Spukschloss_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55484
+Multi-casting "[IP] 192.168.2.110 [Port] 55484 [Flags] 2 [Guid] 3829179358 [EditorId] 3399130142 [Version] 1048832 [Id] WindowsPlayer(Dandelion) [Debug] 0" to [225.0.0.222:54997]...
+Started listening to [0.0.0.0:55484]
+PlayerConnection already initialized - listening to [0.0.0.0:55484]
+Initialize engine version: 5.5.2f1 (3829d7f588f3)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA Quadro K2100M (ID=0x11fc)
+    Vendor:   NVIDIA
+    VRAM:     2017 MB
+    Driver:   21.21.13.7662
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+- Completed reload, in  0.023 seconds
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Mandy\Documents\GitHub\spukschloss\Spukschloss_Data\Managed\System.dll (this message is harmless)
+<RI> Initializing input.
+<RI> Input initialized.
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initialized touch support.
+UnloadTime: 1.095381 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 5.048311 ms
+System memory in use before: 44.4 MB.
+System memory in use after: 44.4 MB.
+
+Unloading 27 unused Assets to reduce memory usage. Loaded Objects now: 286.
+Total: 0.193240 ms (FindLiveObjects: 0.014510 ms CreateObjectMapping: 0.015926 ms MarkObjects: 0.125287 ms  DeleteObjects: 0.026190 ms)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Mono/MonoBehaviour.cpp Line: 1526)
+
+The referenced script on this Behaviour (Game Object 'SoundManager') is missing!
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Mono/MonoBehaviour.cpp Line: 1754)
+
+A script behaviour (probably UnityEngine.Audio.AudioSpatializerMicrosoft?) has a different serialization layout when loading. (Read 32 bytes but expected 36 bytes)
+Did you #ifdef UNITY_EDITOR a section of your serialized properties in any of your scripts?
+ 
+(Filename: C:/buildslave/unity/build/Runtime/Serialize/SerializedFile.cpp Line: 1820)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.319589 ms
+System memory in use before: 49.2 MB.
+System memory in use after: 49.4 MB.
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 4627.
+Total: 1.043001 ms (FindLiveObjects: 0.191470 ms CreateObjectMapping: 0.067598 ms MarkObjects: 0.769775 ms  DeleteObjects: 0.013448 ms)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 1554 -> priority: 1 
+  Thread -> id: 418 -> priority: 1 

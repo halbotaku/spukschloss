@@ -47,10 +47,18 @@ public class pathFollower : MonoBehaviour
 
     //sprite of the hotel owner character
     private GameObject hotelOwnerSprite;
+    private bool isWaiting;
+
+    //variables remembering if figure has moved
+    private float tempXmove;
+    private float tempYmove;
 
 
     private void Awake()
     {
+        tempXmove = transform.position.x;
+        tempYmove = transform.position.y;
+
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
         mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -61,6 +69,7 @@ public class pathFollower : MonoBehaviour
         arranger.currentPath = 14;
         directionReversed = false;
         isRepairing = false;
+        isWaiting = true;
 
         //reference the repairScript
         repairScript = GetComponent<RepairScript>();
@@ -79,8 +88,7 @@ public class pathFollower : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        //control the optical disappearance when going through walls
+    {   //control the optical disappearance when going through walls
         checkWalls();
 
         //when there are no objects to repair
@@ -98,17 +106,15 @@ public class pathFollower : MonoBehaviour
         //Check the distance of the object to the next waypoint
         float dist = Vector3.Distance(gameObject.transform.position, arranger.paths[arranger.currentPath].transform.GetChild(currentWaypoint).position);
 
-        getPath();
+        if (dist <= minDist)
+        {
+            //Move the Object to next waypoint
+            getPath();
+        }
 
         //Check if minimum Distance is achieved, if so go to next waypoint
         if (dist > minDist)
         {
-            //only start the play animation when you have stood before, otherweise avoid a reload
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
-            {
-                myAnimator.Play("walk");
-            }
-
             //Move the Object to next waypoint
             Move();
         }
@@ -141,6 +147,21 @@ public class pathFollower : MonoBehaviour
                 }
             }
         }
+
+        if (tempXmove != gameObject.transform.position.x && tempYmove != gameObject.transform.position.y || tempXmove != gameObject.transform.position.x || tempYmove != gameObject.transform.position.y)
+        {
+            myAnimator.Play("walk");
+        }
+        else
+        {
+            if (isWaiting)
+            {
+                myAnimator.Play("stand");
+            }
+        }
+
+        tempXmove = transform.position.x;
+        tempYmove = transform.position.y;
     }
 
 
@@ -256,6 +277,9 @@ public class pathFollower : MonoBehaviour
                 destination = "reception";
                 break;
         }
+
+        tempYmove = this.transform.position.y;
+        tempXmove = this.transform.position.x;
     }
 
     private void checkReceptionPath()
@@ -266,8 +290,11 @@ public class pathFollower : MonoBehaviour
         {
             directionReversed = false;
 
-            //start doing shit but dont scare me ok
-            //Debug.Log("Ich habe nichts zu tun!");
+            isWaiting = true;
+        }
+        else
+        {
+            isWaiting = false;
         }
 
         //when he is at a room on the ground floor except for the reception
@@ -295,7 +322,7 @@ public class pathFollower : MonoBehaviour
     private void checkRL1Path()
     {
         //when he is at RL1 already
-        if (arranger.currentPath == 1 && currentWaypoint == 1)
+        if (arranger.currentPath == 1 && currentWaypoint == 1 && transform.position. x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -339,7 +366,7 @@ public class pathFollower : MonoBehaviour
     private void checkRL2Path()
     {
         //when he is at RL1 already
-        if (arranger.currentPath == 2 && currentWaypoint == 1)
+        if (arranger.currentPath == 2 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -352,7 +379,7 @@ public class pathFollower : MonoBehaviour
         }
 
         //when he is at the room next door
-        if (arranger.currentPath == 1 && currentWaypoint == 1)
+        if (arranger.currentPath == 1 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             //go to RL1 right away
             arranger.currentPath = 2;
@@ -383,7 +410,7 @@ public class pathFollower : MonoBehaviour
     private void checkRR1Path()
     {
         //when he is at RR1 already
-        if (arranger.currentPath == 3 && currentWaypoint == 1)
+        if (arranger.currentPath == 3 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -427,7 +454,7 @@ public class pathFollower : MonoBehaviour
     private void checkRR2Path()
     {
         //when he is at RR1 already
-        if (arranger.currentPath == 4 && currentWaypoint == 1)
+        if (arranger.currentPath == 4 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -471,7 +498,7 @@ public class pathFollower : MonoBehaviour
     private void checkPoolPath()
     {
         //when he is at the pool already
-        if (arranger.currentPath == 5 && currentWaypoint == 2)
+        if (arranger.currentPath == 5 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -527,7 +554,7 @@ public class pathFollower : MonoBehaviour
     private void checkRLPath()
     {
         //when he is at RL already
-        if (arranger.currentPath == 6 && currentWaypoint == 2)
+        if (arranger.currentPath == 6 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -583,7 +610,7 @@ public class pathFollower : MonoBehaviour
     private void checkRTL1Path()
     {
         //when he is at the RTL1 already
-        if (arranger.currentPath == 10 && currentWaypoint == 2)
+        if (arranger.currentPath == 10 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -639,7 +666,7 @@ public class pathFollower : MonoBehaviour
     private void checkRTL2Path()
     {
         //when he is at the RTL2 already
-        if (arranger.currentPath == 11 && currentWaypoint == 2)
+        if (arranger.currentPath == 11 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -695,7 +722,7 @@ public class pathFollower : MonoBehaviour
     private void checkRCPath()
     {
         //when he is at RC already
-        if (arranger.currentPath == 7 && currentWaypoint == 1)
+        if (arranger.currentPath == 7 && currentWaypoint == 1 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -750,7 +777,7 @@ public class pathFollower : MonoBehaviour
     private void checkRRPath()
     {
         //when he is at RR already
-        if (arranger.currentPath == 8 && currentWaypoint == 2)
+        if (arranger.currentPath == 8 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -805,7 +832,7 @@ public class pathFollower : MonoBehaviour
     private void checkKitchenPath()
     {
         //when he is at the kitchen already
-        if (arranger.currentPath == 9 && currentWaypoint == 2)
+        if (arranger.currentPath == 9 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -860,7 +887,7 @@ public class pathFollower : MonoBehaviour
     private void checkRTR1Path()
     {
         //when he is at RTR1 already
-        if (arranger.currentPath == 12 && currentWaypoint == 2)
+        if (arranger.currentPath == 12 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 
@@ -915,7 +942,7 @@ public class pathFollower : MonoBehaviour
     private void checkRTR2Path()
     {
         //when he is at RTR2 already
-        if (arranger.currentPath == 13 && currentWaypoint == 2)
+        if (arranger.currentPath == 13 && currentWaypoint == 2 && transform.position.x == tempXmove && transform.position.y == tempYmove)
         {
             directionReversed = false;
 

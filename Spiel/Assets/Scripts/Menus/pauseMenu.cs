@@ -8,7 +8,7 @@ public class pauseMenu : MonoBehaviour {
 
     public GameObject pauseUI;
 
-    private bool paused = false;
+    [HideInInspector] public bool paused = false;
 
     public GameObject exitWindow;
     public GameObject timeOutWindow;

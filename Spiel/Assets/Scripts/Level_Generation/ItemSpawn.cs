@@ -117,6 +117,8 @@ public class ItemSpawn : MonoBehaviour
 
         modeScript.pickUpMode = defaultModeScript.pickUpMode;
         modeScript.interactionMode = defaultModeScript.interactionMode;
+        modeScript.pickUpGlow = defaultModeScript.pickUpGlow;
+        modeScript.interactionGlow = defaultModeScript.interactionGlow;
 
 
         //create the Sprite & add it as a child to the pickUp
@@ -138,15 +140,29 @@ public class ItemSpawn : MonoBehaviour
         spriteRenderer.sortingLayerName = defaultSpriteRenderer.sortingLayerName;
         spriteRenderer.sortingOrder = defaultSpriteRenderer.sortingOrder;
 
-        //create the SpriteOutline component & add properties
-        sprite.AddComponent<SpriteOutline>();
+        //create the Glow & add it as a child to the pickUp
+        GameObject glow = new GameObject();
+        glow.transform.parent = pickUp.transform;
 
-        SpriteOutline defaultOutline = defaultSprite.GetComponent<SpriteOutline>();
-        SpriteOutline outline = sprite.GetComponent<SpriteOutline>();
+        //Create Spriterenderer and add properties
+        glow.AddComponent<SpriteRenderer>();
+        GameObject defaultGlow = spawnList[number].transform.GetChild(1).gameObject;
 
-        outline.enabled = defaultOutline.enabled;
-        outline.color = defaultOutline.color;
-        outline.outlineSize = defaultOutline.outlineSize;
+        SpriteRenderer glowRenderer = glow.GetComponent<SpriteRenderer>();
+        SpriteRenderer defaultGlowRenderer = defaultGlow.GetComponent<SpriteRenderer>();
+
+        glowRenderer.sprite = defaultGlowRenderer.sprite;
+
+        glowRenderer.material = defaultGlowRenderer.material;
+        glowRenderer.sortingLayerID = defaultGlowRenderer.sortingLayerID;
+        glowRenderer.sortingLayerName = defaultGlowRenderer.sortingLayerName;
+        glowRenderer.sortingOrder = defaultGlowRenderer.sortingOrder;
+        glow.transform.localPosition = defaultGlow.transform.localPosition;
+        glow.transform.localScale = defaultGlow.transform.localScale;
+
+        //create the glowScript and add properties
+        glow.AddComponent<GlowEffekt>();
+        GlowEffekt glowing = glow.GetComponent<GlowEffekt>();
 
         //set the position of the spawned item
         switch (pickUpInfo.myName)
@@ -725,7 +741,7 @@ public class ItemSpawn : MonoBehaviour
                 break;
 
             default:
-                Debug.Log("Beim Spawn des Flyers ist etwas schief gelaufen!");
+                Debug.Log("Beim Spawn ist etwas schief gelaufen!");
                 break;
         }
     }
@@ -739,7 +755,7 @@ public class ItemSpawn : MonoBehaviour
         int pick;
 
         do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
-        while (seedS.Contains(pick));
+        while (matS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)
@@ -809,7 +825,7 @@ public class ItemSpawn : MonoBehaviour
         int pick;
 
         do { pick = rnd.Next(0, newSpawnPos.transform.childCount); }
-        while (seedS.Contains(pick));
+        while (underwearS.Contains(pick));
 
         //set the position to the chosen spawn point
         switch (pick)

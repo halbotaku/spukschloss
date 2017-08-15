@@ -106,7 +106,7 @@ public class InteractionList : MonoBehaviour {
             }
         }
 
-        if (reactingGuest)
+        if (reactingGuest && reactingGuest.GetComponent<pathFollowerGuest>().notReacting == true)
         {
             //create an instance of pathFollowerGuest
             pathFollowerGuest startReactionGuest = reactingGuest.GetComponent<pathFollowerGuest>();
@@ -115,6 +115,7 @@ public class InteractionList : MonoBehaviour {
             //Start the process of the guests' Reaction
             if (isSpecial == true && pickUp.GetComponent<PickUpInfo>().myName == hateObject || isSpecial == false)
             {
+                startReactionGuest.playScream();
                 startReactionGuest.letGuestReact(gameObject, pickUp);
             }
         }

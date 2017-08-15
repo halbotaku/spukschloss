@@ -54,7 +54,7 @@ public class mainMenu : MonoBehaviour {
 
     public void startLevel()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     public void startImpressum()

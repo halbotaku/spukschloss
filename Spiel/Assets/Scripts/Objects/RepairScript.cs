@@ -22,6 +22,8 @@ public class RepairScript : MonoBehaviour {
     private GameObject repairTimer;
     private Animator repairTimeAnimator;
 
+    private AudioSource audio;
+
     void Awake()
     {
         roomRepairList = new List<string>();
@@ -29,6 +31,8 @@ public class RepairScript : MonoBehaviour {
     }
 
     void Start() {
+        audio = this.gameObject.GetComponent<AudioSource>();
+
         //hotelOwner is not repairing in the beginning
         isRepairing = false;
 
@@ -42,12 +46,9 @@ public class RepairScript : MonoBehaviour {
 
         if (isRepairing == true)
         {
-
             //handle the countdown of the repair time
             if (countdown > 0)
             {
-                //TO DO: REPAIR ANIMATION
-
                 //reduce the countdown
                 countdown = countdown - Time.deltaTime;
             }
@@ -96,6 +97,7 @@ public class RepairScript : MonoBehaviour {
             //handle waiting for the repairtime length
             countdown = interactionList.repairTime[interactionList.index];
             isRepairing = true;
+            audio.Play();
         }
     }
 

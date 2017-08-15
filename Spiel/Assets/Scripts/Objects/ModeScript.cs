@@ -10,28 +10,32 @@ public class ModeScript : MonoBehaviour {
 
     //Variables referencing the Pick-Up-Object & Shader
     private GameObject pickUpSprite;
-    private SpriteOutline shader;
+    private GameObject glow;
 
     //referencing the player
     private GameObject player;
     private ObjectPickUp playerMovement;
 
+    //referencing the sprite types
+    public Sprite pickUpGlow;
+    public Sprite interactionGlow;
+
     public void Start()
     {
         //reference the pickUp Object & Shader
-        pickUpSprite = gameObject.transform.GetChild(0).gameObject;
-        shader = pickUpSprite.GetComponent<SpriteOutline>();
+        glow = gameObject.transform.GetChild(1).gameObject;
+        SpriteRenderer glowSprite = glow.GetComponent<SpriteRenderer>();
 
         //disable shader
-        shader.enabled = false;
+        glow.SetActive(false);
 
         if (gameObject.CompareTag("pickUpObject"))
         {
-            shader.color = Color.red;
+            glowSprite.sprite = pickUpGlow;
         }
         else
         {
-            shader.color = Color.blue;
+            glowSprite.sprite = interactionGlow;
         }
 
         //remember who the player is
@@ -64,11 +68,11 @@ public class ModeScript : MonoBehaviour {
             //check if you are in pickUp-Mode
             if (pickUpMode == true)
             {
-                shader.enabled = true;
+                glow.SetActive(true);
             }
             else
             {
-                shader.enabled = false;
+                glow.SetActive(false);
             }
 
         }
@@ -100,11 +104,11 @@ public class ModeScript : MonoBehaviour {
             //check if you are in interaction-Mode
             if (interactionMode == true)
             {
-                shader.enabled = true;
+                glow.SetActive(true);
             }
             else
             {
-                shader.enabled = false;
+                glow.SetActive(false);
             }
         }
     }

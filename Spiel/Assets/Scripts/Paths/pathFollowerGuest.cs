@@ -60,9 +60,11 @@ public class pathFollowerGuest : MonoBehaviour
 
     //boolean controlling the accouncement of the special guest
     [HideInInspector] public bool isSpecial;
-    private bool notReacting;
+    public bool notReacting;
     private float warningCountdown;
     private float silenceCountdown;
+
+    private float recepCountdown = 5;
 
     //guestCounter for Game-Scor
     public GameObject guestCounter;
@@ -99,9 +101,27 @@ public class pathFollowerGuest : MonoBehaviour
     //sprite of the guest
     private GameObject sprite;
 
+    //reference your SoundManager
+    private HotelGuestSound sounds;
+    private AudioSource audioSource;
+    private static System.Random rnd;
+
+    //variables remembering if figure has moved
+    private float tempXmove;
+    private float tempYmove;
+
+    static pathFollowerGuest()
+    {
+        rnd = new System.Random();
+    }
+
+
     // This function is called just one time by Unity the moment the game loads
     private void Start()
     {
+        tempXmove = transform.position.x;
+        tempYmove = transform.position.y;
+
         // get a reference to the SpriteRenderer component on this gameObject (Flipping the Sprite)
         sprite = this.gameObject.transform.GetChild(2).gameObject;
         mySpriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -160,11 +180,18 @@ public class pathFollowerGuest : MonoBehaviour
         specialItemScream = GameObject.FindGameObjectWithTag("Player").GetComponent<SpecialPickUp>();
         cryOut = false;
         dummy = false;
-    }
+
+        //reference the audio management
+        sounds = gameObject.GetComponentInChildren<HotelGuestSound>();
+        audioSource = gameObject.GetComponentInChildren<AudioSource>();
+}
 
     // Update is called once per frame
     void Update()
     {
+        tempXmove = transform.position.x;
+        tempYmove = transform.position.y;
+
         //control the effect of going through the walls
         checkWalls();
 
@@ -273,7 +300,7 @@ public class pathFollowerGuest : MonoBehaviour
         if (dist > minDist)
         {
             //only start the play animation when you have stood before, otherweise avoid a reload
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("stand") || transform.position.x != tempXmove && transform.position.y != tempYmove)
             {
                 myAnimator.Play("walk");
             }
@@ -293,7 +320,7 @@ public class pathFollowerGuest : MonoBehaviour
                         if (idleCountdown > 0)
                         {
                             //only stop the play animation when you have walked before, otherweise avoid a reload
-                            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+                            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk") && tempXmove == gameObject.transform.position.x && tempYmove == gameObject.transform.position.y)
                             {
                                 myAnimator.Play("stand");
                             }
@@ -335,11 +362,6 @@ public class pathFollowerGuest : MonoBehaviour
                         if (idleCountdown > 0)
                         {
                             //only stop the play animation when you have walked before, otherweise avoid a reload
-                            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
-                            {
-                                myAnimator.Play("stand");
-                            }
-
                             idleCountdown = idleCountdown - Time.deltaTime;
                         }
                         else
@@ -377,7 +399,7 @@ public class pathFollowerGuest : MonoBehaviour
         if (isWaitingInRoom == true && roomWaitingCountdown > 0)
         {
             //only stop the play animation when you have walked before, otherweise avoid a reload
-            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
+            if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk") && transform.position.x == tempXmove && transform.position.y == tempYmove)
             {
                 myAnimator.Play("stand");
             }
@@ -398,7 +420,7 @@ public class pathFollowerGuest : MonoBehaviour
         }
 
         //Handle returning to idling at any point
-        if (isReturningToIdling == true && isWaitingInRoom == false)
+        if (isReturningToIdling == true)
         {
             reactionIcon.SetActive(false);
             patienceCounter.SetActive(false);
@@ -427,7 +449,7 @@ public class pathFollowerGuest : MonoBehaviour
 
 
         //Handle the at-Reception-Waiting Countdown
-        if (isWaitingAtReception == true)
+        if (isWaitingAtReception == true && tempXmove == gameObject.transform.position.x && tempYmove == gameObject.transform.position.y)
         {
             //only stop the play animation when you have walked before, otherweise avoid a reload
             if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk"))
@@ -444,11 +466,30 @@ public class pathFollowerGuest : MonoBehaviour
                 //when the ghost triggered the checkout
                 if (receptionWaitingCountdown < 0)
                 {
-                    //ghostly hotelOwner disappears when having checked out one guest
-                    fakeHotelOwner.GetComponent<CheckOut>().isCheckingOut = false;
-
                     //stop waiting and go to reception
                     stopWaitingAtReception();
+                }
+            }
+            else
+            {
+                if (recepCountdown > 0)
+                {
+                    recepCountdown = recepCountdown - Time.deltaTime;
+                }
+
+                if (recepCountdown <= 0)
+                {
+                    if (hasBeenRepairedYet(brokenObject))
+                    {
+                        //return back to idling in your room
+                        isReturningToIdling = true;
+                    }
+                    else {
+                        //stop waiting and go back
+                        isWaitingAtReception = false;
+                        isReturningToRoom = true;
+                        recepCountdown = 5;
+                    }
                 }
             }
 
@@ -459,6 +500,11 @@ public class pathFollowerGuest : MonoBehaviour
                     //stop waiting and go back
                     isWaitingAtReception = false;
                     isReturningToRoom = true;
+                }
+                else
+                {
+                    goingToReception = true;
+                    recepCountdown = 5;
                 }
             }
         }
@@ -484,7 +530,7 @@ public class pathFollowerGuest : MonoBehaviour
             reachedRoom = currentWaypoint == 0;
         }
 
-        if (reachedRoom == true)
+        if (reachedRoom == true && tempXmove == gameObject.transform.position.x && tempYmove == gameObject.transform.position.y)
         {
             goingToReception = false;
             reachedRoom = false;
@@ -498,11 +544,16 @@ public class pathFollowerGuest : MonoBehaviour
             reachedOutside = currentWaypoint + 1 == arranger.paths[arranger.currentPath].transform.childCount && this.gameObject.transform.position.y <= -6.00;
         }
 
-        if (reachedOutside == true)
+        if (reachedOutside == true && tempXmove == gameObject.transform.position.x && tempYmove == gameObject.transform.position.y)
         {
             goingToReception = false;
             reachedOutside = false;
             startLeaving();
+        }
+
+        if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("walk") && transform.position.x == tempXmove && transform.position.y == tempYmove)
+        {
+            myAnimator.Play("stand");
         }
     }
 
@@ -560,7 +611,7 @@ public class pathFollowerGuest : MonoBehaviour
 
         //Set the Countdown to the waiting times
         roomWaitingCountdown = waitUntilReception;
-        receptionWaitingCountdown = waitUntilLeave;
+        receptionWaitingCountdown = 1;
 
         //calculate the speed with which the animation needs to be played according to the waiting time
         float animationSpeed = (4/3) / waitUntilReception;
@@ -638,23 +689,6 @@ public class pathFollowerGuest : MonoBehaviour
 
     private void startWaitingAtReception()
     {
-        //calculate the speed with which the animation needs to be played according to the waiting time
-        float animationSpeed = (4 / 3) / waitUntilLeave;
-
-        if (animationSpeed - 0.05f > 0)
-        {
-            animationSpeed -= 0.025f;
-        }
-
-        patienceCounterAnimator.speed = animationSpeed;
-
-        //reference the brokenObject
-        InteractionList list = brokenObject.GetComponent<InteractionList>();
-        string gradeOfDamage = list.gradeOfDamage[list.index];
-
-        //check for the grade of damage done
-        string patienceCounterAnim = checkGradeOfDamage(gradeOfDamage);
-
         /*
          * Actual Reaction follows now, Countdown is handled in the Update function
          */
@@ -665,12 +699,6 @@ public class pathFollowerGuest : MonoBehaviour
         //assign yourself to waiting at reception once you reached it
         isWaitingAtReception = true;
         goingToReception = false;
-
-        //set patienceCounter active
-        patienceCounter.SetActive(true);
-
-        //set the patience counter active and play it for the necessary waiting time
-        patienceCounterAnimator.Play(patienceCounterAnim);
     }
 
 
@@ -698,6 +726,8 @@ public class pathFollowerGuest : MonoBehaviour
         idleInRoom = true;
 
         notReacting = true;
+
+        receptionWaitingCountdown = waitUntilLeave;
     }
 
     private void startLeaving()
@@ -776,5 +806,28 @@ public class pathFollowerGuest : MonoBehaviour
         {
             sprite.SetActive(true);
         }
+    }
+
+    public void playScream()
+    {
+        int number = rnd.Next(0, 4);
+
+        switch (number)
+        {
+            case 0:
+                audioSource.clip = sounds.screamFemaleA;
+                break;
+            case 1:
+                audioSource.clip = sounds.screamFemaleB;
+            break;
+            case 2:
+                audioSource.clip = sounds.screamMaleA;
+                break;
+            case 3:
+                audioSource.clip = sounds.screamMaleB;
+                break;
+        }
+
+        audioSource.Play();
     }
 }

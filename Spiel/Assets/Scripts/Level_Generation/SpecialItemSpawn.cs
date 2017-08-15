@@ -25,6 +25,8 @@ public class SpecialItemSpawn : MonoBehaviour {
     private bool isCooling;
     private float coolingPeriod;
 
+    private AudioSource audio;
+
     // Use this for initialization
     void Start () {
         //reference the current level countdown 
@@ -33,6 +35,8 @@ public class SpecialItemSpawn : MonoBehaviour {
         levelCountdown = clock.counter;
         levelLength = clock.counter;
         coolingPeriod = minimumSpawnTimeDifference;
+
+        audio = this.gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -52,12 +56,16 @@ public class SpecialItemSpawn : MonoBehaviour {
 
             if (coolingPeriod < 0)
             {
-                int random = rnd.Next(1, spawnProbility+1);
+                //avoid two special spawns at once, destroy the special spawn when unused
+                if (this.gameObject.transform.childCount > 0)
+                {
+                    GameObject.Destroy(this.gameObject.transform.GetChild(0).gameObject);
+                }
+
+                int random = rnd.Next(1, spawnProbility + 1);
 
                 if (random == 1)
                 {
-                    Debug.Log("Spawn Special");
-
                     int prefabNumber = rnd.Next(1, 4);
                     GameObject prefab = screamPrefab;
 
@@ -87,7 +95,10 @@ public class SpecialItemSpawn : MonoBehaviour {
                     float ypos = float.Parse(yString);
 
                     GameObject go = (GameObject)Instantiate(prefab);
+                    go.transform.parent = this.gameObject.transform;
                     go.transform.position = new Vector2(xpos, ypos);
+
+                    audio.Play();
                 }
 
                 coolingPeriod = minimumSpawnTimeDifference;
